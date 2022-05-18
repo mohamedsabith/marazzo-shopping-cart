@@ -20,7 +20,7 @@ router.get("/", function (req, res) {
  
 });
 
-router.get("/signup",verifyUser, function (req, res) {
+router.get("/signup",verifySession, function (req, res) {
 
   res.header("Cache-control","no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0");
 
@@ -168,11 +168,11 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get('/wishlist',(req,res)=>{
+router.get('/wishlist',verifyUser,(req,res)=>{
    res.render('user/wishlist')
 })
 
-router.get('/cart',(req,res)=>{
+router.get('/cart',verifyUser,(req,res)=>{
    res.render('user/cart')
 })
 
