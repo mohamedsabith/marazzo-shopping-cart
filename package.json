@@ -1,0 +1,29 @@
+{
+  "name": "sm-cart-ecommerce",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "colors": "^1.4.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.1",
+    "email-verifier-node": "^0.0.2",
+    "express": "~4.16.1",
+    "express-handlebars": "^6.0.5",
+    "express-session": "^1.17.3",
+    "fast-two-sms": "^3.0.0",
+    "hbs": "~4.0.4",
+    "http-errors": "~1.6.3",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.3",
+    "morgan": "~1.9.1",
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.16",
+    "phone": "^3.1.17"
+  }
+}

@@ -1,0 +1,109 @@
+
+    <head>
+
+        <!--=============== BOXICONS ===============-->
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="/stylesheets/myAccount.css">
+    </head>
+    <body>
+        <!--=============== NAV ===============-->
+        <nav class="nav" id="nav">
+            <div class="nav__menu container" id="nav-menu">
+                <div class="nav__shape"></div>
+
+                <div class="nav__close" id="nav-close">
+                    <i class='bx bx-x'></i>
+                </div>
+                
+                <div class="nav__data">
+                    <div class="nav__mask">
+                        <!-- Change your profile picture -->
+                        <img src="" alt="" class="nav__img">
+                    </div>
+
+                    <span class="nav__greeting">{{email}}</span>
+                    <h1 class="nav__name">{{username}}</h1>
+                </div>
+
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="#home" class="nav__link active-link">
+                            <i class='bx bx-home' ></i> Home 
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#about" class="nav__link">
+                            <i class='bx bx-cart'></i> My Orders
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#portfolio" class="nav__link">
+                            <i class='bx bx-edit'></i> My Reviews
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#skills" class="nav__link">
+                            <i class='bx bx-help-circle'></i> Get Help
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/logout" class="nav__link">
+                            <i class='bx bx-log-out'></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!--=============== MAIN ===============-->
+        <main class="main" id="main">
+            <!--=============== HEADER ===============-->
+            <header class="header" id="header">
+                <nav class="header__nav container">
+                    <a href="#" class="header__logo">
+                      {{username}}
+                    </a>
+    
+                    <!-- Toggle button -->
+                    <div class="header__toggle" id="header-toggle">
+                        <i class='bx bx-grid-alt'></i>
+                    </div>
+                </nav>
+            </header>
+
+
+            <!-- When inserting your content into sections, remove the section__height class -->
+            <!--=============== HOME ===============-->
+            <section class="section section__height container" id="home">
+                <h1>HOME</h1>
+                
+            </section>
+
+            <!--=============== ABOUT ===============-->
+            <section class="section section__height container" id="about">
+                <h1>ABOUT</h1>
+                
+            </section>
+
+            <!--=============== PORTFOLIO ===============-->
+            <section class="section section__height container" id="portfolio">
+                <h1>PORTFOLIO</h1>
+                
+            </section>
+
+            <!--=============== SKILLS ===============-->
+            <section class="section section__height container" id="skills">
+                <h1>SKILLS</h1>
+                
+            </section>
+
+            <!--=============== CONTACT ===============-->
+            <section class="section section__height container" id="contact">
+                <h1>CONTACT</h1>
+
+            </section>
+        </main>
+        <script src="/javascripts/main.js"></script>
+    </body>

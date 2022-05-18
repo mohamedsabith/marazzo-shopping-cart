@@ -1,0 +1,98 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/opensans-font.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/line-awesome/css/line-awesome.min.css">
+	<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+	<link rel="stylesheet" href="/stylesheets/signup.css" />
+</head>
+
+{{>user-header}}
+{{>user-navbar}}
+
+<body class="form-v4">
+	<div class="page-content">
+		<div class="form-v4-content">
+			<div class="form-left">
+				<h2>INFOMATION</h2>
+				<p class="text-1">Explore vast selection of products from Top Brands. Pay on Delivery. Great Offers. Low
+					Prices. Best Deals. Top Brands. Easy & Fast Delivery. No Cost EMI Available. Huge Selection.</p>
+				<p class="text-2"><span>Sign up with your mobile number to get started</span></p>
+				<div class="form-left-last">
+					<a href="/login"><input type="submit" name="account" class="account" value="Have An Account"></a>
+				</div>
+			</div>
+			<form class="form-detail" action="/signup" method="post" id="myform">
+				<h2>REGISTER FORM</h2>
+				<p style="color: red; font-weight: 500; font-size: 17px;">{{signupErr}}</p>
+				<div class="form-row">
+					<label for="your_email">Your Username</label>
+					<input type="text" name="username" id="your_username" class="input-text" required>
+				</div>
+				<div class="form-row">
+					<label for="your_email">Your Email</label>
+					<input type="email" name="email" id="your_email" class="input-text" required>
+				</div>
+				<div class="form-row">
+					<label for="your_email">Your Number</label>
+					<input type="text" name="phone_number" id="your_number" class="input-text" required>
+				</div>
+				<div class="form-group">
+					<div class="form-row form-row-1 ">
+						<label for="password">Password</label>
+						<input type="password" name="password" id="password" class="input-text" required>
+					</div>
+					<div class="form-row form-row-1">
+						<label for="comfirm-password">Confirm Password</label>
+						<input type="password" name="conform_password" id="comfirm_password" class="input-text"
+							required>
+					</div>
+				</div>
+				<div class="form-row-last">
+					<input type="submit" class="register" value="Register">
+				</div>
+			</form>
+		</div>
+	</div>
+	{{>user-footer}}
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+	<script>
+		// just for the demos, avoids form submit
+		jQuery.validator.setDefaults({
+			success: function (label) {
+				label.attr('id', 'valid');
+			},
+		});
+
+		$("#myform").validate({
+			rules: {
+				password: "required",
+				confirm_password: {
+					equalTo: "#password"
+				},
+				phone_number: {
+					minlength: 10,
+					maxlength: 10
+				}
+			},
+			messages: {
+				username: {
+					required: "Please enter a username"
+				},
+				phone_number: {
+					required: "Please enter a number"
+				},
+				email: {
+					required: "Please provide an email"
+				},
+				password: {
+					required: "Please enter a password"
+				},
+				confirm_password: {
+					required: "Please enter a confirm Password",
+					equalTo: "password not match"
+				}
+			}
+		});
+	</script>
+</body>
