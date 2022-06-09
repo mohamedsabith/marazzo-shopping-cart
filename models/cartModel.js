@@ -2,20 +2,44 @@ const Mongoose = require('mongoose')
 
 const cartSchema=new Mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: String,
+        required:true
       },
       products: [
         {
-          productId: Number,
+          productId: Mongoose.Types.ObjectId,
           quantity: Number,
           name: String,
-          price: Number
+          price: Number,
+          brand:String,
+          image:String,
+          shippingcost:Number,
+          discountPrice:Number,
+          total:{
+            type:Number,
+            default:0
+          }
         }
       ],
       active: {
         type: Boolean,
         default: true
+      },
+      shippingcost:{
+         type:Number,
+         default:0
+      },
+      discountPrice:{
+         type:Number,
+         default:0
+      },
+      couponDiscount:{
+         type:Number,
+         default:0
+      },
+      total:{
+        type:Number,
+        default:0
       },
       modifiedOn: {
         type: Date,
@@ -23,7 +47,7 @@ const cartSchema=new Mongoose.Schema({
       }
 })
 
-const cartModel = Mongoose.model("Cart", cartSchema);
+const cartModel = Mongoose.model("Carts", cartSchema);
 
 
 module.exports=cartModel;

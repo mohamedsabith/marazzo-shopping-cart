@@ -1,0 +1,55 @@
+<head>
+    <link rel="stylesheet" href="/stylesheets/orderTrack.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+</head>
+<div class="container">
+    <article class="card">
+        <header class="card-header"> My Orders / Tracking </header>
+        <div class="card-body">
+            <h6>Order ID: OD45345345435</h6>
+            <article class="card">
+                <div class="card-body row">
+                    <div class="col"> <strong>Estimated Delivery time:</strong> <br>{{result.deliverDate}}</div>
+                    <div class="col"> <strong>Shipping BY:</strong> <br> {{address.name}}<br><i class="fa fa-phone"></i> +91{{address.phone_number}}</div>
+                    <div class="col"> <strong>Status:</strong> <br> {{result.status}} </div>
+                    <div class="col"> <strong>Tracking #:</strong> <br> BD045903594059 </div>
+                </div>
+            </article>
+            <div class="track">
+                
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Picked by courier</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text"> On the way </span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Ready for pickup</span> </div>
+            </div>
+            <hr>
+            <ul class="row">
+                <li class="col-md-4">
+                    <figure class="itemside mb-3">
+                        <div class="aside"><img src="/products/{{result.image}}" class="img-sm border"></div>
+                        <figcaption class="info align-self-center">
+                            <p class="title">Name:  {{result.name}} <br>Quantity: {{result.quantity}}</p> <span class="text-muted">Total: ${{result.subtotal}} </span>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+            <hr>
+            <a href="/myorder" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+        </div>
+    </article>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    
+(function($) { 
+    $(document).ready(function() {
+        const div=document.getElementsByClassName("step")
+        var status = "{{result.status}}";
+        if(status == "Order placed"){
+          div[0].classList.add("active")
+        }else if()
+    });
+})(jQuery);
+</script>

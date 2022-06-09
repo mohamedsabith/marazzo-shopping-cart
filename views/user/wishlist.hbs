@@ -1,5 +1,5 @@
 {{>user-header}}
-{{>user-navbar}}
+{{>user-navbar token=token totalAmt=totalAmt countCart=countCart}}
 <div class="breadcrumb">
 	<div class="container">
 		<div class="breadcrumb-inner">
@@ -10,8 +10,29 @@
 		</div>
 	</div>
 </div>
+{{#if empty}}
+<div class="container-fluid  mt-100">
+	 <div class="row">
+	 <div class="col-md-12">				
+	<div class="card">
+	<div class="card-header">
+		</div>
+		<div class="card-body cart">
+		<div class="col-sm-12 empty-cart-cls text-center">
+		<img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+    <h3><strong style="font-family: 'Calibri', sans-serif !important;">Empty Wishlist</strong></h3>
+	<h4 style="font-family: 'Calibri', sans-serif !important;">You have no items in your wishlist. Start adding!</h4>
+	<a href="/" class="btn btn-primary cart-btn-transform m-3" data-abc="true" style="font-family: 'Calibri', sans-serif !important;">continue shopping</a>							
+</div>
+</div>
+</div>					
+</div>
+</div>				
+</div>
+{{else}}
 <div class="body-content">
 	<div class="container">
+		{{#if wishlistProducts.product}}
 		<div class="my-wishlist-page">
 			<div class="row">
 				<div class="col-md-12 my-wishlist">
@@ -22,11 +43,12 @@
 					<th colspan="4" class="heading-title">My Wishlist</th>
 				</tr>
 			</thead>
+			{{#each wishlistProducts.product}}
 			<tbody>
 				<tr>
-					<td class="col-md-2 col-sm-6 col-xs-6"><img src="/images/products/p1.jpg" alt="imga"></td>
+					<td class="col-md-2 col-sm-6 col-xs-6"><img src="/products/{{this.image.[0].proImg1}}" alt="imga" onclick="window.location.href='/viewProduct/{{this._id}}' " ></td>
 					<td class="col-md-7 col-sm-6 col-xs-6">
-						<div class="product-name"><a href="#">Floral Print Buttoned</a></div>
+						<div class="product-name"><a href="/wishlist">{{this.productName}}</a></div>
 						<div class="rating">
 							<i class="fa fa-star rate"></i>
 							<i class="fa fa-star rate"></i>
@@ -36,50 +58,30 @@
 							<span class="review">( 06 Reviews )</span>
 						</div>
 						<div class="price">
-							$400.00
-							<span>$900.00</span>
+						    {{this.discountPrice}}
+							<span>{{this.price}}</span>
 						</div>
 					</td>
 					<td class="col-md-2 ">
-						<a href="#" class="btn-upper btn btn-primary">Add to cart</a>
+						<a  onclick="addToCart('{{this._id}}')" class="btn-upper btn btn-primary">Add to cart</a>
 					</td>
 					<td class="col-md-1 close-btn">
-						<a href="#" class=""><i class="fa fa-times"></i></a>
-					</td>
-				</tr>
-				<tr>
-					<td class="col-md-2"><img src="/images/products/p2.jpg" alt="phoro"></td>
-					<td class="col-md-7">
-						<div class="product-name"><a href="#">Floral Print Buttoned</a></div>
-						<div class="rating">
-							<i class="fa fa-star rate"></i>
-							<i class="fa fa-star rate"></i>
-							<i class="fa fa-star rate"></i>
-							<i class="fa fa-star rate"></i>
-							<i class="fa fa-star non-rate"></i>
-							<span class="review">( 06 Reviews )</span>
-						</div>
-						<div class="price">
-							$450.00
-							<span>$900.00</span>
-						</div>
-					</td>
-					<td class="col-md-2">
-						<a href="#" class="btn-upper btn btn-default">Add to cart</a>
-					</td>
-					<td class="col-md-1 close-btn">
-						<a href="#" class=""><i class="fa fa-times"></i></a>
+						<a onclick="wishlistDelete('{{../wishlistProducts.user}}','{{this._id}}')"><i class="fa fa-times"></i></a>
 					</td>
 				</tr>
 			</tbody>
+			{{/each}}
 		</table>
+	
 	</div>
 </div>			</div>
 		</div>
+	{{/if}}
 
 </div>
 </div>
-        <div class="row our-features-box" style="margin-top: 30px;">
+{{/if}}
+        <div class="row our-features-box" style="margin-top: 130px;">
      <div class="container">
       <ul>
         <li>
@@ -112,3 +114,50 @@
     </div>
   </div>
   {{>user-footer}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script type="text/javascript">
+function addToCart(proId){
+    $.ajax({
+        url:'/cart/'+proId,
+        method:'get',
+        success:(response)=>{
+           if(response.error){
+              swal("A product already exists in cart.", {
+                    icon: "error",
+                    })
+           }else{
+           swal("Cart successfully updated.", {
+                    icon: "success",
+                    })
+            $('#cart-count').html(response.count)
+           }
+        }
+    })
+}
+
+function wishlistDelete(userId,proId){
+    swal({
+        title: "Are you sure?",
+        text: "Are you sure want to remove this prodcut.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+ }).then((willDelete)=>{
+  if(willDelete){
+     $.ajax({
+        url:'/wishlistDelete',
+        data:{
+            user:userId,
+            product:proId,
+        },
+        method:'post',
+        success:(response)=>{
+         location.reload()
+         }
+        })
+ }
+      })
+}
+
+</script>

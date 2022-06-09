@@ -1,0 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+
+.jumbotron-flat {
+    background-color: solid ;
+    height: 100%;
+    border: 1px solid #4DB8FF;
+    background: white;
+    width: 100%;
+    text-align: center;
+    overflow: auto
+}
+
+.paymentAmt {
+    font-size: 80px
+}
+
+.centered {
+    text-align: center
+}
+
+.title {
+    padding-top: 15px
+}

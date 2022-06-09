@@ -1,12 +1,11 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="/stylesheets/opensans-font.css">
 	<link rel="stylesheet" type="text/css" href="/fonts/line-awesome/css/line-awesome.min.css">
 	<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
 	<link rel="stylesheet" href="/stylesheets/signup.css" />
 </head>
 
 {{>user-header}}
-{{>user-navbar}}
+{{>user-navbar countCart=countCart}}
 
 <body class="form-v4">
 	<div class="page-content">
@@ -69,6 +68,9 @@
 				password: "required",
 				confirm_password: {
 					equalTo: "#password"
+				},
+				password:{
+                minlength: 6
 				},
 				phone_number: {
 					minlength: 10,

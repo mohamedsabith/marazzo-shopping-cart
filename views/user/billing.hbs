@@ -1,0 +1,164 @@
+<head>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.1/css/mdb.min.css'>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/addressConform.css">
+<link rel="stylesheet" href="/stylesheets/billinAddess.css">
+</head>
+
+<div class="container">
+<div class="card-deck row">
+
+  {{#if userAddress}}
+  <div class="col-xs-12 col-sm-6 col-md-4">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title" style="text-transform: uppercase;">{{userAddress.username}} (HOME)</h4>
+       <p class="card-text">{{userAddress.phone_number}}</p>
+      <p class="card-text">{{userAddress.address}}</p> 
+      <p class="card-text"> {{userAddress.city}}, {{userAddress.district}}, {{user.state}}</p>
+      <p class="card-text">{{userAddress.zipcode}}</p>
+      <button type="button" class="btn btn-deep-orange btn-md" onclick="AddNew('{{userAddress._id}}')">Deliver Here</button>
+    </div>
+  </div>
+  </div>
+  {{/if}}
+
+    {{#each billingAddress}}
+    <div class="col-xs-12 col-sm-6 col-md-4">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title" style="text-transform: uppercase;">{{this.name}}</h4>
+      <p class="card-text">{{this.phone_number}}</p>
+      <p class="card-text">{{this.address}}</p> 
+      <p class="card-text">{{this.city}} , {{this.district}}, {{this.state}}</p>
+      <p class="card-text">{{this.zipCode}}</p>
+      <button type="button" class="btn btn-deep-orange btn-md" onclick="deliverHere('{{this._id}}')">Deliver Here</button>
+    </div>
+  </div>
+  </div>
+ {{/each}}
+</div>
+
+{{!-- form --}}
+<body style="font-family: 'Open Sans', sans-serif;">
+    <hr class="featurette-divider">
+    </hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="tab-content">
+                    <div id="stripe" class="tab-pane fade in active">
+                        <script src='https://js.stripe.com/v2/' type='text/javascript'></script>
+                        <form  action="/newAddress" class="require-validation" id="payment-form" method="post">
+                            <div class='form-row'>
+                                <div class='form-group required'>
+                                    <div class='error form-group hide'>
+                                        <div class='alert-danger alert'>
+                                            Please correct the errors and try again.
+                                        </div>
+                                    </div>
+                                    <label class='control-label'>Name</label>
+                                    <input class='form-control' type='text' name="name" required>
+                                </div>
+                            </div>
+                            <div class='form-row'>
+                                <div class='form-group cvc required'>
+                                    <label class='control-label'>Phone Number</label>
+                                    <input autocomplete='off' class='form-control card-cvc'  maxlength="10"  type='text' minlength="10" name="phone_number" required>
+                                </div>
+                                 <div class='form-group cvc required'>
+                                    <label class='control-label'>Billing Address</label>
+                                    <input autocomplete='off' class='form-control card-cvc' type='text' name="address"  required>
+                                </div>
+                                 <div class='form-group cvc required'>
+                                    <label class='control-label'>Zipcode</label>
+                                    <input autocomplete='off' class='form-control card-cvc' min="6"  maxlength="6" id="myInput" type='text' minlength="6" name="zipcode" oninput="pincode()" required>
+                                </div>
+                                <div class='form-group expiration required'>
+                                    <label class='control-label'>State</label>
+                                    <input class='form-control card-expiry-month'  type='text' name="state" id="state" required>
+                                </div>
+                                <div class='form-group expiration required'>
+                                    <label class='control-label'>District</label>
+                                    <input class='form-control card-expiry-month' type='text' name="district" id="district" required>
+                                </div>
+                                <div class='form-group expiration required'>
+                                    <label class='control-label'>City</label>
+                                    <input class='form-control card-expiry-year' type='text' name="city" id="city" required>
+                                </div>
+                            </div>
+                              <div class='form-row'>
+                                <div class='form-group'>
+                                    <label class='control-label'></label>
+                                    <button class='form-control btn btn-primary' type='submit'> Continue →</button>
+                          </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <label class='control-label'></label>
+        <br><br><br>
+        <div class="jumbotron jumbotron-flat">
+            <div class="center">
+                <h2>PRICE DETAILS:</h2>
+            </div>
+            <div class="paymentAmt">
+                <P>Price ({{countCart}} item) :   <span style="color: black;">${{totalAmt.Total.total}}</span></P>
+                <P>Discount :     <span style="color: green;">$ -{{cart.discountPrice}}</span></P>
+                <P>Delivery charges :    ${{cart.shippingcost}}</P>
+                <P style="color: orangered;">Total Amount :     ${{totalAmt.totalAmount}}</P>
+            </div>
+        </div>
+        <br><br><br>
+    </div>
+    </div>
+    </div>
+    </div>
+    </form>
+</body>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  function deliverHere(addressId){
+    $.ajax({
+        url:'/deliver/'+addressId,    
+        method:'get',
+        success:(response)=>{
+           if(response.status==true){
+            window.location = "/payment";
+           }
+        }
+    })
+}
+
+  function AddNew(addressId){
+    $.ajax({
+        url:'/homeAddress/'+addressId,    
+        method:'get',
+        success:(response)=>{
+         deliverHere(response.id)
+        }
+    })
+}
+
+ function pincode(){
+         var x = document.getElementById("myInput").value;
+       if(x.length>=6){  
+        $.ajax({
+        url:'/pincode/'+x,
+        method:'get',
+        success:(response)=>{
+            console.log(response)
+            $('#city').val(response.officeName)
+            $('#state').val(response.stateName)
+            $('#district').val(response.districtName)
+        }
+    })
+       }
+    }
+</script>

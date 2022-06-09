@@ -1,14 +1,8 @@
-
-    <head>
-
-        <!--=============== BOXICONS ===============-->
-        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-
-        <!--=============== CSS ===============-->
-        <link rel="stylesheet" href="/stylesheets/myAccount.css">
-    </head>
+<head>
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/stylesheets/myAccount.css">
+</head>
     <body>
-        <!--=============== NAV ===============-->
         <nav class="nav" id="nav">
             <div class="nav__menu container" id="nav-menu">
                 <div class="nav__shape"></div>
@@ -20,36 +14,40 @@
                 <div class="nav__data">
                     <div class="nav__mask">
                         <!-- Change your profile picture -->
+                        {{#if user.image}}
+                        <img src="/User/{{user.image}}" alt="" class="nav__img">
+                        {{else}}
                         <img src="" alt="" class="nav__img">
+                        {{/if}}
                     </div>
 
-                    <span class="nav__greeting">{{email}}</span>
-                    <h1 class="nav__name">{{username}}</h1>
+                    <span class="nav__greeting">{{user.email}}</span>
+                    <h1 class="nav__name" style="text-transform: capitalize;">{{user.username}}</h1>
                 </div>
 
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a href="#home" class="nav__link active-link">
+                        <a href="#home" class="nav__link active-link" style="text-decoration: none;">
                             <i class='bx bx-home' ></i> Home 
                         </a>
                     </li>
                     <li class="nav__item">
-                        <a href="#about" class="nav__link">
+                        <a href="/myorder" class="nav__link" style="text-decoration: none;">
                             <i class='bx bx-cart'></i> My Orders
                         </a>
                     </li>
                     <li class="nav__item">
-                        <a href="#portfolio" class="nav__link">
+                        <a href="#portfolio" class="nav__link" style="text-decoration: none;">
                             <i class='bx bx-edit'></i> My Reviews
                         </a>
                     </li>
                     <li class="nav__item">
-                        <a href="#skills" class="nav__link">
+                        <a href="#skills" class="nav__link" style="text-decoration: none;">
                             <i class='bx bx-help-circle'></i> Get Help
                         </a>
                     </li>
                     <li class="nav__item">
-                        <a href="/logout" class="nav__link">
+                        <a href="/logout" class="nav__link" style="text-decoration: none;">
                             <i class='bx bx-log-out'></i> Logout
                         </a>
                     </li>
@@ -62,9 +60,9 @@
             <!--=============== HEADER ===============-->
             <header class="header" id="header">
                 <nav class="header__nav container">
-                    <a href="#" class="header__logo">
-                      {{username}}
-                    </a>
+                    <h5 href="#" class="header__logo" style="text-transform: uppercase">
+                      {{user.username}}
+                    </h5>
     
                     <!-- Toggle button -->
                     <div class="header__toggle" id="header-toggle">
@@ -77,33 +75,120 @@
             <!-- When inserting your content into sections, remove the section__height class -->
             <!--=============== HOME ===============-->
             <section class="section section__height container" id="home">
-                <h1>HOME</h1>
-                
-            </section>
-
-            <!--=============== ABOUT ===============-->
-            <section class="section section__height container" id="about">
-                <h1>ABOUT</h1>
-                
-            </section>
-
-            <!--=============== PORTFOLIO ===============-->
-            <section class="section section__height container" id="portfolio">
-                <h1>PORTFOLIO</h1>
-                
-            </section>
-
-            <!--=============== SKILLS ===============-->
-            <section class="section section__height container" id="skills">
-                <h1>SKILLS</h1>
-                
-            </section>
-
-            <!--=============== CONTACT ===============-->
-            <section class="section section__height container" id="contact">
-                <h1>CONTACT</h1>
-
-            </section>
-        </main>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+              <div class="container card-0 justify-content-center ">
+         <div class="card-body px-sm-4 px-0">
+        <div class="row justify-content-center mb-5">
+        </div>
+        <div class="row justify-content-center round">
+            <div class="col-lg-10 col-md-12 ">
+                <div class="card shadow-lg card-1">
+                    <form action="/updateProfile/{{user.email}}" method="post" enctype="multipart/form-data">
+                    <div class="card-body inner-card">
+                           <p style="color: red;">{{err}}</p>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                     <label for="first-name">Username</label>
+                                     <input type="text" class="form-control" id="first-name" name="username" placeholder="Type your Name" value="{{user.username}}" required> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label for="Mobile-Number">Mobile Number</label> 
+                                    <input type="text" class="form-control" id="Mobile-Number" name="phone_number" value="{{user.phone_number}}" required>
+                               </div>
+                                <div class="form-group">
+                                    <label for="inputEmail4">Gender</label> 
+                                    <select name="gender" class="form-control" required>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="others">Other</option>
+                                    </select> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label for="Company-Name">Zipcode</label> 
+                                    <input name="zipcode" type="text" class="form-control" id="myInput" placeholder="" value="{{user.zipcode}}" oninput="pincode()" required>
+                                 </div>
+                           
+                                  <div class="form-group">
+                                     <label for="time">District</label>
+                                      <input type="text" name="district" class="form-control" id="district"  placeholder="" value="{{user.district}}" required>
+                                 </div>
+                               </div>
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <div class="form-group"> 
+                                    <label for="last-name">Account Created</label> 
+                                    <input type="text" class="form-control" id="last-name" value="{{user.Created_at}}" disabled>
+                              </div>
+                                <div class="form-group"> 
+                                    <label for="phone">Email</label>
+                                     <input type="email" name="email" class="form-control" id="email" value="{{user.email}}" required>
+                                 </div>
+                                <div class="form-group"> 
+                                    <label for="Evaluate Budget">Country</label>
+                                    <select name="country" class="form-control" required>
+                                        <option value="india">India</option>
+                                        <option value="us">Us</option>
+                                        <option value="china">China</option>
+                                        <option value="uk">Uk</option>
+                                        <option value="pakistan">Pakistan</option>
+                                    </select>
+                                </div>
+                                 <div class="form-group">
+                                     <label for="time">State</label>
+                                      <input type="text" name="state" class="form-control" id="state" placeholder="" value="{{user.state}}" required>
+                                 </div>
+                                  <div class="form-group"> 
+                                    <label for="Company-Name">City</label> 
+                                    <input name="city" type="text" class="form-control" id="city" placeholder="" value="{{user.city}}" required>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 col-lg-10 col-12">
+                                <div class="form-group files">
+                                <label class="my-auto">Upload Your File</label> 
+                                <input id="file" type="file" class="form-control" name="userimg">
+                                <input type="text" name="image" value="{{user.image}}" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 col-lg-10 col-12">
+                                <div class="form-group">
+                                     <label for="exampleFormControlTextarea2">Address</label>
+                                    <input name="address" class="form-control rounded-0" id="exampleFormControlTextarea2"  rows="5" value="{{user.address}}" required></input>
+                                </div>
+                                <div class="mb-2 mt-4">
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-primary btn-block"><small class="font-weight-bold">SUBMIT</small></button> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>     
+  </section>
+</main>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="/javascripts/main.js"></script>
-    </body>
+        <script>
+    function pincode(){
+         var x = document.getElementById("myInput").value;
+        $.ajax({
+        url:'/pincode/'+x,
+        method:'get',
+        success:(response)=>{
+            console.log(response)
+            $('#city').val(response.officeName)
+            $('#state').val(response.stateName)
+            $('#district').val(response.districtName)
+        }
+    })
+    }
+</script>
+</body>

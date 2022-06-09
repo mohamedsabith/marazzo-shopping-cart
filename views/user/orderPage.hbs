@@ -1,0 +1,101 @@
+   <head>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/order.css">
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table table-responsive-xl">
+						  <thead>
+						    <tr>
+							  <th>Product</th>
+						      <th>Product Name</th>
+						      <th>Order Date</th>
+						      <th>Status</th>
+						      <th>View</th>
+							  <th>Cancel</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+							  {{#each productOrder}}
+						    <tr class="alert" role="alert">
+						      
+							   <td><img src="/products/{{this.image}}" alt="" height="50px" width="50px"></td>
+
+						    	<td>
+						    	 {{this.name}}
+						    	</td>
+						
+						      <td>
+						      	<div class="pl-3 email"> 
+						      		<span>Order: {{this.created}}</span>
+									  {{#if this.cancelDate}}
+                                      <span style="color: red;">Canceled: {{this.cancelDate}}</span>
+									  {{else}}
+						      		  <span>Deliver: {{this.deliverDate}}</span>
+									  {{/if}}
+						      	</div>
+						      </td>
+
+							   {{#if active}}
+							 
+							   <td class="status"><span  class="active">{{this.status}}</span></td>
+							  {{else if cancel}}
+							    <td class="status"><span  class="danger" style="padding: 4px 15px 4px 19px;">{{this.status}}</span></td>
+								{{else}}
+							    <td class="status"><span  class="waiting">{{this.status}}</span></td>
+							  {{/if}}
+                             
+							 <td>
+								<a href="/orderTrack/{{this._id}}" style="text-decoration: none; color: rgb(13, 0, 255);">View</a>
+							 </td>
+                               {{#if cancel}}
+						       <td>
+								 <a style="text-decoration: none; color: red;">Order Canceled</a>
+                              </td>
+							  {{else}}
+                               <td>
+								 <a onclick="orderCancel('{{this._id}}')" style="text-decoration: none; color: red;">Cancel</a>
+                              </td>
+							  {{/if}}
+						    </tr>
+							{{/each}}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+	function orderCancel(orderId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to cancel this order",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+ }).then((willDelete)=>{
+  if(willDelete){
+     $.ajax({
+        url:'/orderCancel',
+        data:{
+            id:orderId
+        },
+        method:'post',
+        success:(response)=>{
+         location.reload()
+        }
+        })
+ }
+      })
+}
+</script>

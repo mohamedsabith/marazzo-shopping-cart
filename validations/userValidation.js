@@ -50,5 +50,24 @@ const resetpasswordValidation = (data)=>{
         return schema.validate(data);
 }
 
+const updateProfileValidation = (data) =>{
+    const schema = Joi.object({
+        username: Joi.string().required().min(3).label('Username'),
+        phone_number:Joi.number().integer().min(10).required().label('Number'),
+        email: Joi.string().email().required().label('Email').lowercase(),
+        gender:Joi.string().required().label('Gender'),
+        state:Joi.string().required().label('State'),
+        country:Joi.string().required().label('Country'),
+        district:Joi.string().required().label('District'),
+        city:Joi.string().required().label('City'),
+        image:Joi.invalid(),
+        zipcode:Joi.number().required().integer().min(6).label('Zipcode'),
+        address:Joi.string().required().min(10).max(100).label('Address')
+    })
 
-module.exports={userSignupvalidation,userLoginValidation,forgetpasswordValidation,resetpasswordValidation};
+  
+        return schema.validate(data);
+
+}
+ 
+module.exports={userSignupvalidation,userLoginValidation,forgetpasswordValidation,resetpasswordValidation,updateProfileValidation};

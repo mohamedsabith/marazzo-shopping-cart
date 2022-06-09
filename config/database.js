@@ -6,9 +6,9 @@ mongoose.connect("mongodb://localhost:27017/shoppingcart", {
 })
 
 mongoose.connection.on("error", err => {
-  console.log("err", err)
+  console.log("err".red, err)
 })
 
 mongoose.connection.on("connected", (err, res) => {
-    console.log('mongoose is connected'.yellow);
+    console.log('mongoose is connected');
 })

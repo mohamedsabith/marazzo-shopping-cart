@@ -27,15 +27,9 @@ const reviewSchema=new Mongoose.Schema({
         type: Boolean,
         default: true
       },
-      status: {
-        type: String,
-        default: 'Waiting Approval',
-        enum: ['Waiting Approval', 'Rejected', 'Approved']
-      },
-      updated: Date,
       created: {
         type: Date,
-        default: Date.now
+        default: moment().format("DD/MM/YYYY") + ";" + moment().format("hh:mm:ss")
       }
 })
 

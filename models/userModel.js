@@ -20,6 +20,36 @@ const userSchema=new Mongoose.Schema({
         type: String,
         required:true
     },
+    gender:{
+        type:String,
+        default:''
+    },
+    country:{
+        type:String,
+        default:''
+    },
+    state:{
+       type:String,
+       default:''
+    },
+    zipcode:{
+        type:Number,
+        default:''
+    },
+    address:{
+        type:String,
+        default:""
+    },
+    city:{
+        type:String
+    },
+    district:{
+        type:String
+    },
+    image:{
+         type:String,
+         default:''
+    },
     otpcode:{
         type:Number,
         default:0
@@ -33,9 +63,10 @@ const userSchema=new Mongoose.Schema({
        default:"notreset"
     },
     Created_at:{
-        type: Date,
-        default: Date.now
+        type: String,
+        required:true
     },
+
 })
 
 const userModel = Mongoose.model("User", userSchema);

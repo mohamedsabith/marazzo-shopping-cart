@@ -3,7 +3,7 @@ const Mongoose = require('mongoose')
 const adminSchema=new Mongoose.Schema({
     username:{
         type:String,
-        required:true
+        required:true,
     },
     password:{
         type: String,
@@ -14,8 +14,8 @@ const adminSchema=new Mongoose.Schema({
         default: Date.now
     },
     created_at:{
-        typ:Date,
-        default:Date.now
+        type:Date,
+        default: Date.now
     }
 })
 

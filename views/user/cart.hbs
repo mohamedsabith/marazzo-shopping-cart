@@ -1,44 +1,66 @@
-{{>user-header}}
-{{>user-navbar}}
+{{>user-header token=token totalAmt=totalAmt}}
+{{>user-navbar countCart=countCart}}
 <div class="breadcrumb">
     <div class="container">
         <div class="breadcrumb-inner">
             <ul class="list-inline list-unstyled">
-                <li><a href="#">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li class='active'>Shopping Cart</li>
             </ul>
         </div>
     </div>
 </div>
-<div class="body-content outer-top-xs">
+{{#if empty}}
+<div class="container-fluid  mt-100">
+				 <div class="row">
+				 
+					<div class="col-md-12">
+					
+							<div class="card">
+						<div class="card-header">
+						</div>
+						<div class="card-body cart">
+								<div class="col-sm-12 empty-cart-cls text-center">
+									<img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+									<h3><strong style="font-family: 'Calibri', sans-serif !important;">Your Cart is Empty</strong></h3>
+									<h4 style="font-family: 'Calibri', sans-serif !important;">Add something to make me happy :)</h4>
+									<a href="/" class="btn btn-primary cart-btn-transform m-3" data-abc="true" style="font-family: 'Calibri', sans-serif !important;">continue shopping</a>
+									
+								
+								</div>
+						</div>
+				</div>					
+</div>
+</div>				
+</div>
+{{else}}
+<div class="body-content outer-top-xs" id="qty">
     <div class="container">
         <div class="row ">
             <div class="shopping-cart">
-                <div class="shopping-cart-table ">
+                <div class="shopping-cart-table">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th class="cart-romove item">Remove</th>
                                     <th class="cart-description item">Image</th>
                                     <th class="cart-product-name item">Product Name</th>
-                                    <th class="cart-edit item">Edit</th>
                                     <th class="cart-qty item">Quantity</th>
                                     <th class="cart-sub-total item">Subtotal</th>
                                     <th class="cart-total last-item">Grandtotal</th>
+                                     <th class="cart-romove item">Remove</th>
                                 </tr>
                             </thead>
-                            < <tbody>
+                             <tbody>
+                                 {{#each cart.products}}
                                 <tr>
-                                    <td class="romove-item"><a href="#" title="cancel" class="icon"><i
-                                                class="fa fa-trash-o"></i></a></td>
                                     <td class="cart-image">
-                                        <a class="entry-thumbnail" href="">
-                                            <img src="/images/products/p1.jpg" alt="">
+                                        <a class="entry-thumbnail" href="/viewProduct/{{this.productId}}">
+                                            <img src="/products/{{this.image}}" alt="cart image">
                                         </a>
                                     </td>
                                     <td class="cart-product-name-info">
-                                        <h4 class='cart-product-description'><a href="">Floral Print Buttoned</a></h4>
+                                        <h4 class='cart-product-description'><a href="">{{this.name}}</a></h4>
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="rating rateit-small"></div>
@@ -49,175 +71,76 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="cart-product-info">
-                                            <span class="product-color">COLOR:<span>Blue</span></span>
-                                        </div>
                                     </td>
-                                    <td class="cart-product-edit"><a href="#" class="product-edit">Edit</a></td>
                                     <td class="cart-product-quantity">
                                         <div class="quant-input">
-                                            <div class="arrows">
-                                                <div class="arrow plus gradient"><span class="ir"><i
-                                                            class="icon fa fa-sort-asc"></i></span></div>
-                                                <div class="arrow minus gradient"><span class="ir"><i
-                                                            class="icon fa fa-sort-desc"></i></span></div>
-                                            </div>
-                                            <input type="text" value="1">
+                                             <div class="arrows">
+				                    <div class="arrow plus gradient"><span class="ir"><i class="icon fa fa-sort-asc" onclick="changeQuantity('{{../cart._id}}','{{this.productId}}','{{this.quantity}}',1)"></i></span></div>
+				                    <div class="arrow minus gradient"><span class="ir"><i class="icon fa fa-sort-desc" onclick="changeQuantity('{{../cart._id}}','{{this.productId}}','{{this.quantity}}',-1)"></i></span></div>
+				                           </div>
+                                             <input type="text" min="1" value="{{this.quantity}}">
                                         </div>
                                     </td>
-                                    <td class="cart-product-sub-total"><span class="cart-sub-total-price">$300.00</span>
+                                    <td class="cart-product-sub-total"><span class="cart-sub-total-price">${{this.price}}</span>
                                     </td>
                                     <td class="cart-product-grand-total"><span
-                                            class="cart-grand-total-price">$300.00</span></td>
+                                            class="cart-grand-total-price">${{this.total}}</span></td>
+                                  <td class="romove-item"><a onclick="cartDelete('{{../cart._id}}','{{this.productId}}')" title="cancel" class="icon"><i class="fa fa-trash-o"></i></a></td>
                                 </tr>
-                                <tr>
-                                    <td class="romove-item"><a href="#" title="cancel" class="icon"><i
-                                                class="fa fa-trash-o"></i></a></td>
-                                    <td class="cart-image">
-                                        <a class="entry-thumbnail" href="">
-                                            <img src="/images/products/p2.jpg" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="cart-product-name-info">
-                                        <h4 class='cart-product-description'><a href="">Floral Print Buttoned</a></h4>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="rating rateit-small"></div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="reviews">
-                                                    (06 Reviews)
-                                                </div>
-                                            </div>
-                                        </div><!-- /.row -->
-                                        <div class="cart-product-info">
-                                            <span class="product-color">COLOR:<span>Pink</span></span>
-                                        </div>
-                                    </td>
-                                    <td class="cart-product-edit"><a href="#" class="product-edit">Edit</a></td>
-                                    <td class="cart-product-quantity">
-                                        <div class="cart-quantity">
-                                            <div class="quant-input">
-                                                <div class="arrows">
-                                                    <div class="arrow plus gradient"><span class="ir"><i
-                                                                class="icon fa fa-sort-asc"></i></span></div>
-                                                    <div class="arrow minus gradient"><span class="ir"><i
-                                                                class="icon fa fa-sort-desc"></i></span></div>
-                                                </div>
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart-product-sub-total"><span class="cart-sub-total-price">$300.00</span>
-                                    </td>
-                                    <td class="cart-product-grand-total"><span
-                                            class="cart-grand-total-price">$300.00</span></td>
-                                </tr>
-                                </tbody><!-- /tbody -->
+                                {{/each}}
+                                </tbody>
 
                                 <tfoot>
                                     <tr>
                                         <td colspan="7">
                                             <div class="shopping-cart-btn">
                                                 <span class="">
-                                                    <a href="#" class="btn btn-upper btn-primary outer-left-xs">Continue
+                                                    <a href="/" class="btn btn-upper btn-primary outer-left-xs">Continue
                                                         Shopping</a>
-                                                    <a href="#"
-                                                        class="btn btn-upper btn-primary pull-right outer-right-xs">Update
-                                                        shopping cart</a>
+                                                    <a class="btn btn-upper btn-primary pull-right outer-right-xs">Update Cart</a>
                                                 </span>
-                                            </div><!-- /.shopping-cart-btn -->
+                                            </div>
                                         </td>
                                     </tr>
                                 </tfoot>
-                        </table><!-- /table -->
+                        </table>
                     </div>
-                </div><!-- /.shopping-cart-table -->
+                </div>
                 <div class="col-md-4 col-sm-12 estimate-ship-tax">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>
-                                    <span class="estimate-title">Estimate shipping and tax</span>
-                                    <p>Enter your destination to get shipping and tax.</p>
-                                </th>
+                            <tr>                     
                             </tr>
-                        </thead><!-- /thead -->
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="info-title control-label">Country <span>*</span></label>
-                                        <select class="form-control unicase-form-control selectpicker">
-                                            <option>--Select options--</option>
-                                            <option>India</option>
-                                            <option>SriLanka</option>
-                                            <option>united kingdom</option>
-                                            <option>saudi arabia</option>
-                                            <option>united arab emirates</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="info-title control-label">State/Province <span>*</span></label>
-                                        <select class="form-control unicase-form-control selectpicker">
-                                            <option>--Select options--</option>
-                                            <option>TamilNadu</option>
-                                            <option>Kerala</option>
-                                            <option>Andhra Pradesh</option>
-                                            <option>Karnataka</option>
-                                            <option>Madhya Pradesh</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="info-title control-label">Zip/Postal Code</label>
-                                        <input type="text" class="form-control unicase-form-control text-input"
-                                            placeholder="">
-                                    </div>
-                                    <div class="pull-right">
-                                        <button type="submit" class="btn-upper btn btn-primary">GET A QOUTE</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                        </thead>
                     </table>
-                </div><!-- /.estimate-ship-tax -->
-
+                </div>
                 <div class="col-md-4 col-sm-12 estimate-ship-tax">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>
-                                    <span class="estimate-title">Discount Code</span>
-                                    <p>Enter your coupon code if you have one..</p>
-                                </th>
-                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control unicase-form-control text-input"
-                                            placeholder="You Coupon..">
-                                    </div>
-                                    <div class="clearfix pull-right">
-                                        <button type="submit" class="btn-upper btn btn-primary">APPLY COUPON</button>
-                                    </div>
-                                </td>
                             </tr>
-                        </tbody><!-- /tbody -->
-                    </table><!-- /table -->
-                </div><!-- /.estimate-ship-tax -->
-
+                        </tbody>
+                    </table>
+                </div>
+                {{#if totalAmt.Total.total}}
                 <div class="col-md-4 col-sm-12 cart-shopping-total">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>
                                     <div class="cart-sub-total">
-                                        Subtotal<span class="inner-left-md">$600.00</span>
+                                        Price ({{countCart}} items)<span class="inner-left-md">$ {{totalAmt.Total.total}}</span>
+                                    </div>
+                                    <div class="cart-sub-total">
+                                        Discount Price<span class="inner-left-md" style="color: green;">$ -{{cart.discountPrice}}</span>
+                                    </div>
+                                    <div class="cart-sub-total">
+                                        Delivery charges<span class="inner-left-md">$ {{cart.shippingcost}}</span>
                                     </div>
                                     <div class="cart-grand-total">
-                                        Grand Total<span class="inner-left-md">$600.00</span>
+                                        Total Amount<span class="inner-left-md">$ {{totalAmt.totalAmount}}</span>
                                     </div>
                                 </th>
                             </tr>
@@ -226,8 +149,7 @@
                             <tr>
                                 <td>
                                     <div class="cart-checkout-btn pull-right">
-                                        <button type="submit" class="btn btn-primary checkout-btn">PROCCED TO
-                                            CHEKOUT</button>
+                                        <button type="submit" class="btn btn-primary checkout-btn" onclick="window.location.href='/billing' ">PROCCED TO CHEKOUT</button>
                                         <span class="">Checkout with multiples address!</span>
                                     </div>
                                 </td>
@@ -235,12 +157,13 @@
                         </tbody>
                     </table>
                 </div>
+                {{/if}}
             </div>
         </div>
     </div>
 </div>
-
-<div class="row our-features-box" style="margin-top: 30px;">
+{{/if}}
+<div class="row our-features-box" style="margin-top: 100px;">
     <div class="container">
         <ul>
             <li>
@@ -273,3 +196,56 @@
     </div>
 </div>
 {{>user-footer}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+function changeQuantity(cartId,proId,qty,count){
+    $.ajax({
+        url:'/change-product-quantity',
+        data:{
+            cart:cartId,
+            product:proId,
+            qty:qty,
+            count:count
+        },
+        method:'post',
+        success:(response)=>{
+        if(response.count){
+           $("#qty").load(window.location.href + " #qty" );
+        }else if(response.quantity==0){
+         
+        }else{
+         swal("Out of Stock", {
+                icon: "error",
+            })
+        }
+     }
+    })
+}
+
+function cartDelete(cartId,proId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to remove this from your cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+ }).then((willDelete)=>{
+  if(willDelete){
+     $.ajax({
+        url:'/cartDelete',
+        data:{
+            cart:cartId,
+            product:proId,
+        },
+        method:'post',
+        success:(response)=>{
+         location.reload()
+       }
+        })
+ }
+      })
+}
+
+</script>

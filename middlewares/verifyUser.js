@@ -6,13 +6,14 @@ const verifyUser= (req, res, next) => {
         const token = req.cookies.token;
     
         if (!token){
-            res.redirect('/')
+            res.redirect('/login')
         }else{
         const decoded = jwt.verify(token,process.env.JWT_TOKEN);
         req.user = decoded;
         next();
         }
     } catch (error) {
+        res.clearCookie("token");
         res.status(400).send("Invalid token");
     }
 };

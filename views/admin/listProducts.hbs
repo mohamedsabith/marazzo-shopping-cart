@@ -1,0 +1,89 @@
+ <div class="container-scroller">
+ {{>admin-sidebar}}
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">ALL PRODUCTS</h4>
+                  <p class="card-description">
+                    All products<code>is here.</code>
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            Product
+                          </th>
+                          <th>
+                            Product Name
+                          </th>
+                          <th>
+                            Category
+                          </th>
+                          <th>
+                            Amount
+                          </th>
+                          <th>
+                            Stock
+                          </th>
+                          <th>
+                            Date
+                          </th>
+                          <th>
+                            Edit
+                          </th>
+                          <th>
+                            Delete
+                          </th>
+                        </tr>
+                      </thead>
+                      {{#each products}}
+                      <tbody>
+                        <tr>
+                          <td class="py-1">
+                            <img src="/products/{{this.image.[0].proImg1}}" alt="product image"/>
+                          </td>
+                          <td>
+                            {{this.productName}}
+                          </td>
+                          <td>
+                          {{this.SubCategory.subcategory}}
+                          </td>
+                          <td>
+                            $ {{this.price}}
+                          </td>
+                          <td>
+                            {{this.stock}}
+                          </td>
+                          <td>
+                            {{this.Created_at}}
+                          </td>
+                          <td>
+                            <a href="/admin/editProduct/{{this._id}}" style="text-decoration: none;  color:#0000FF;">Edit</a>
+                          </td>
+                          <td>
+                            <a href="/admin/deleteProduct/{{this._id}}" style="text-decoration: none; color: red;">Delete</a>
+                          </td>
+                        </tr>
+                      </tbody>
+                      {{/each}}
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank"> Shopping Website</a></span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+

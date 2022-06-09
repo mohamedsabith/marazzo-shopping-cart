@@ -1,0 +1,264 @@
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Josefin+Sans:300,400,600,700|Open+Sans:400,600'>
+<script src="https://kit.fontawesome.com/fec4b0395b.js" crossorigin="anonymous"></script>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css'>
+<link rel="stylesheet" href="/stylesheets/payment.css">
+</head>
+
+<body>
+<header>
+    <div class="container">
+      <div class="navigation">
+        <div class="logo">
+          <i class="icon icon-basket"></i>Marazzo</div>
+        <div class="secure">
+          <i class="icon icon-shield"></i>
+          <span>Secure Checkout</span>
+
+        </div>
+      </div>
+      <div class="notification">
+        Complete Your Purchase
+      </div>
+    </div>
+  </header>
+  <section class="content">
+
+    <div class="container">
+
+    </div>
+    <div class="details shadow">
+      <div class="details__item">
+        <div class="item__details">
+            <div class="item__price">
+            PRICE DETAILS:
+          </div>
+          <div class="item__description">
+            <ul style="">
+              <li>Price ({{countCart}} items) : $ {{totalAmt.Total.total}}</li>
+              <li> Discount Price :  <span style="color: green;">$ -{{cart.discountPrice}}</span></li>
+    
+              {{#if discountAmt}}
+               <li> Coupon discount :  <span style="color: green;">$ -{{discountAmt}}</span></li>
+              {{else if cart.couponDiscount}}
+              <li> Coupon discount :  <span style="color: green;">$ -{{cart.couponDiscount}}</span></li>
+              {{/if}}
+               <li> Delivery charges : $ {{cart.shippingcost}}</li>
+              {{#if netAmount}}
+              <li>Total Amount : <span style="color: orangered;">$ {{netAmount}}</span></li>
+              {{else}}
+              <li>Total Amount : <span style="color: orangered;">$ {{totalAmt.totalAmount}}</span></li>
+              {{/if}}
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="discount"></div>
+
+    <div class="container">
+      <div class="payment">
+        <div class="payment__title">
+          Payment Method
+        </div>
+        <div class="payment__types">
+          <div class="payment__type payment__type--paypal" onclick="selectedPayment()">
+            <i class="icon icon-credit-card active"></i>Razorpay</div>
+          <div class="payment__type payment__type--paypal" onclick="selectedPayment()">
+            <i class="icon icon-paypal"></i>Paypal</div>
+          <div class="payment__type payment__type--paypal" style="font-size: 13px;" onclick="selectedPayment()">
+            <i class="icon icon-wallet"></i>Cash on Delivery</div>
+          <div class="payment__type payment__type--paypal" >
+            <i class="icon icon-note"></i>Invoice</div>
+        </div>
+
+        <div class="payment__info">
+          <div class="payment__cc">
+            <div class="payment__title">
+              {{#each coupon}}
+              <i class="fa-solid fa-gift" style="margin-right: 10px;"></i>Redeem this voucher for {{this.isPercent}}% off:<span id="clipboard" style="color: orangered; margin-left: 5px;">{{this.code}} <sup><i style="color: black;" class="fa-solid fa-copy" onclick="CopyToClipboard('clipboard')" ></i></sup></span>
+              {{/each}}
+            </div>
+              <p style="color: red;">{{err}}</p>
+            <form action="/coupon" method="post">
+              <div class="form__cc">
+                <div class="row">
+                  <div class="field">
+                    <div class="title">You have coupon 
+                    </div>
+                    <input type="text" class="input txt text-validated" placeholder="ABC12#E" name="coupon" required />
+                  </div>
+           <button type="submit" style="color: #fff; background-color: black; margin-top: 43px; margin-left: 5px; width: 113px; height: 45px; font-weight: 800;">APPLY</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="payment__shipping">
+            <div class="payment__title">
+              <i class="icon icon-plane"></i> Shiping Information
+          
+            </div>
+            <p style="text-align: right; color: blue;" onclick="window.location.href='/billing' ">change</p>
+            <div class="details__user">
+              <div class="user__name">{{address.name}}
+                <br>{{address.phone_number}}</div>
+              <div class="user__address">{{address.address}}
+                <br>{{address.city}},{{address.district}},{{address.state}}</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="actions">
+
+        <a onclick="paymentSubmit(event)" class="btn action__submit">Place your Order
+          <i class="icon icon-arrow-right-circle"></i>
+        </a>
+        <a href="/cart" class="backBtn">Go Back to Shop</a>
+
+      </div>
+  </section>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script type="text/javascript">
+   function CopyToClipboard(id)
+ {
+  var r = document.createRange();
+  r.selectNode(document.getElementById(id));
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(r);
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+   swal({
+       title:"Copied",
+       icon: 'info',
+       })
+ }
+
+ function selectedPayment(){
+   var x = document.getElementsByClassName("payment__type payment__type--paypal")
+
+   for (var i=0;i<x.length;i++){
+      x[i].addEventListener("click", function(){
+        
+    var selectedEl = document.querySelector(".active");
+
+    if(selectedEl){
+        selectedEl.classList.remove("active");
+    }
+
+    this.classList.add("active");
+        
+    }, false);
+   }
+ }
+
+ function paymentSubmit(event){
+
+   event.preventDefault();
+
+   let div=document.getElementsByClassName("payment__type payment__type--paypal")
+
+   let selected=null
+
+   for(var i=0;i<div.length;i++){
+     if(div[i].classList.contains("active")){
+       selected=div[i].innerText
+     } 
+   }
+   if(selected==null){
+     swal({
+       title:"Please select payment method",
+       })
+   }else{
+      $.ajax({
+        url:'/placeOrder',
+        data:{
+        payment:selected
+        },
+        method:'post',
+        success:(response)=>{
+          console.log(response)
+          if(response.method=="COD"){
+             window.location = "/orderSuccess"
+          }else if(response.method=="Razorpay"){
+            razorpayPayment(response.order,response.user)
+          }
+       }
+      })
+   }
+ }
+
+ function razorpayPayment(order,user){
+   var options = {
+    "key": "rzp_test_4XkFZ4WxWJCKeJ", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Marazzo",
+    "description": "Test Transaction",
+    "image": "https://cdn-icons-png.flaticon.com/512/263/263142.png",
+    "order_id":order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        verifyPayment(response,order)
+    },
+    "prefill": {
+        "name": user.name,
+        "email": user.email,
+        "contact": user.phone_number
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+
+rzp1.on('payment.failed', function (response){
+   swal({
+       title:response.error.description,
+       icon: 'error',
+       })
+});
+
+rzp1.open();
+
+ }
+
+ function verifyPayment(payment,order){
+   $.ajax({
+     url:'/verifyPayment',
+     data:{
+       payment,
+       order
+     },
+     method:'post',
+     success:(response)=>{
+       if(response.status==true){
+            swal({
+             title:"transaction completed successfully",
+             icon: 'success',
+       }).then((willDelete)=>{
+         location.href="/myorder"
+       })
+       }else{
+         swal({
+       title:response.error.description,
+       icon: 'error',
+       })
+       }
+     }
+   })
+ }
+</script>
