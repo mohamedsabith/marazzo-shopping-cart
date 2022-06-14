@@ -206,6 +206,7 @@ router.get('/deleteProduct/:id',verifyAdminToken,(req,res)=>{
      })
 })
 
+//coupon router
 router.get('/addCoupon',verifyAdminToken,(req,res)=>{
    res.render('admin/addCoupon',{err:req.session.couponCodeErr})
    req.session.couponCodeErr=null
