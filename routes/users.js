@@ -6,7 +6,7 @@ require("dotenv").config();
 const { verifyUser, verifyToken,verifySession } = require("../middlewares/verifyUser");
 const upload = require('../middlewares/userMulter')
 const cartModel = require('../models/cartModel')
-const {userSignup, userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,couponDetails,subTotal,checkCouponCode,getWishlist,saveWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,getAddress,billingAddress,conformAddress,shippingAddress,AddNewAddress,AppleBrandProducts,mensFashion,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack} = require("../controllers/userControllers");
+const {userSignup, userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,couponDetails,subTotal,checkCouponCode,getWishlist,saveWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,getAddress,billingAddress,conformAddress,shippingAddress,AddNewAddress,AppleBrandProducts,mensFashion,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack,paymentFailed,generatePdf,productSerach} = require("../controllers/userControllers");
 
 //home router
 router.get("/",async(req, res)=> {
@@ -408,11 +408,14 @@ router.post('/placeOrder',(req,res)=>{
   const token = req.cookies.token;
   const decode= jwt.decode(token)
   newOrder(decode.email,req.body.payment).then((response)=>{
-    getDirection(response).then(async()=>{
+    getDirection(response).then((result)=>{
       req.session.orderId=response.data._id
       if(req.body.payment=="Cash on Delivery"){
-        await cartModel.findOneAndDelete({userId:decode.email})
-        res.status(200).json({status:true,method:"COD"})
+        generatePdf(response,decode.email,result.date).then(async(path)=>{
+          req.session.InvoiceUrl=path
+          await cartModel.findOneAndDelete({userId:decode.email})
+          res.status(200).json({status:true,method:"COD"})
+        })
      }else if(req.body.payment=="Razorpay"){
          generateRazorpay(response).then((result)=>{
             res.status(200).json({order:result,method:"Razorpay",user:decode})
@@ -464,11 +467,8 @@ router.get('/orderSuccess',async(req,res)=>{
      getOrder(req.session.orderId).then((result)=>{
       const TotalDiscount=result.discountPrice+result.couponDiscount
       const netAmount=result.total-result.couponDiscount
-      var todayDateFormat = moment(new Date(result.created)).format("DD/MM/YYYY")
-      var d = moment(todayDateFormat);
-      const deliveryDate=d.format('ddd MMM DD YYYY')
-
-      res.render('user/orderSuccess',{result,address,TotalDiscount,netAmount,deliveryDate})
+      const  deliveryDate = moment(new Date(result.deliverDate)).format("ddd MMM DD YYYY")
+      res.render('user/orderSuccess',{result,address,TotalDiscount,netAmount,deliveryDate,link:req.session.InvoiceUrl})
   })
 
   }else{
@@ -491,6 +491,30 @@ router.get('/orderTrack/:id',async(req,res)=>{
   orderTrack(req.params.id).then((result)=>{
     res.render('user/orderTrack',{result,address})
   })
+})
+
+router.post('/paymentFailed',(req,res)=>{
+   paymentFailed(req.body).then((result)=>{
+   res.status(200).json({status:true})
+   })
+})
+
+router.get('/productSerach',async(req,res)=>{
+   const products=await productSerach()
+   res.status(200).json(products)
+})
+
+router.get('/search',async(req,res)=>{
+  const token = req.cookies.token;
+  const categories= await listAllCategory()
+  const Searchproduct = await productSerach(req.query.search)
+  const searchEmpty=Searchproduct.length==0
+  if(token){
+    var decode= jwt.decode(token)
+    res.render('user/productSearch',{categories,Searchproduct,searchEmpty,token:token,user:decode.name})
+  }else{
+    res.render('user/productSearch',{categories,Searchproduct,searchEmpty})
+  }
 })
 
 module.exports = router;

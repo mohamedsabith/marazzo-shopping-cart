@@ -7,7 +7,7 @@ const productAddValidation = (data)=>{
         stock:Joi.number().required().min(0).max(300).integer().label('Stock'),
         originalPrice:Joi.number().required().min(0).label('Original Price'),
         category:Joi.string().required().label('Product Category'),
-        description:Joi.string().required().min(20).max(200).label('Product Description'),
+        description:Joi.string().required().min(20).max(500).label('Product Description'),
         image1:Joi.invalid(),
         image2:Joi.invalid(),
         image3:Joi.invalid(),

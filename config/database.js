@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 var colors = require('colors');
+require('dotenv').config()
 
-mongoose.connect("mongodb://localhost:27017/shoppingcart", {
+mongoose.connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
 })
 

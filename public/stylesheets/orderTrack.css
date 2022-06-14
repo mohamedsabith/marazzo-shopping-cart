@@ -63,6 +63,9 @@ body {
     background: #FF5722
 }
 
+.track .step.active1:before {
+    background: red
+} 
 .track .step::before {
     height: 7px;
     position: absolute;
@@ -77,6 +80,10 @@ body {
     color: #fff
 }
 
+.track .step.active1 .icon {
+    background: red;
+    color: #fff
+}
 .track .icon {
     display: inline-block;
     width: 40px;

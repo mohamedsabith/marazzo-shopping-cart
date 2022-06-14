@@ -15,19 +15,25 @@
                   <thead>
                     <tr>
                       <th>
-                        Product
+                        User
                       </th>
                       <th>
                         Product Name
                       </th>
                       <th>
-                        Category
+                        Quantity
                       </th>
                       <th>
                         Amount
                       </th>
                       <th>
-                        Stock
+                        Status
+                      </th>
+                      <th>
+                        Paid
+                      </th>
+                      <th>
+                        Payment Type
                       </th>
                       <th>
                         Date
@@ -35,45 +41,38 @@
                       <th>
                         Edit
                       </th>
-                      <th>
-                        Delete
-                      </th>
                     </tr>
                   </thead>
-                  {{#each products}}
+                  {{#each Order}}
                   <tbody>
                     <tr>
                       <td class="py-1">
-                        <img src="/products/{{this.image.[0].proImg1}}" alt="product image" />
+                        {{this.user}}
                       </td>
                       <td>
-                        {{this.productName}}
+                        {{this.name}}
                       </td>
                       <td>
-                        {{this.SubCategory.subcategory}}
+                        {{this.quantity}}
                       </td>
                       <td>
-                        $ {{this.price}}
-                      </td>
-                      {{#if stockLess}}
-                      <td>
-                        <p style="color: red;">Stock less than 5</p>
-                      </td>
-                      {{else}}
-                      <td>
-                        {{this.stock}}
-                      </td>
-                      {{/if}}
-                      <td>
-                        {{this.Created_at}}
+                        $ {{this.subtotal}}
                       </td>
                       <td>
-                        <a href="/admin/editProduct/{{this._id}}"
+                        {{this.status}}
+                      </td>
+                      <td>
+                        {{this.paid}}
+                      </td>
+                      <td>
+                        {{this.paymentType}}
+                      </td>
+                      <td>
+                        {{this.created}}
+                      </td>
+                      <td>
+                        <a href="/admin/editOrder/{{this._id}}/{{this.user}}"
                           style="text-decoration: none;  color:#0000FF;">Edit</a>
-                      </td>
-                      <td>
-                        <a href="/admin/deleteProduct/{{this._id}}"
-                          style="text-decoration: none; color: red;">Delete</a>
                       </td>
                     </tr>
                   </tbody>

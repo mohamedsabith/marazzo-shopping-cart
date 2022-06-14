@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const {adminLogin,allUsers,deleteUser,blockUser,unBlockUser,addProduct,addCategory,addSubCategory,listAllCategory,listAllSubcategory,listProducts,addBrand,listBrands,getProduct,editProduct,deleteProduct,totalUserCount,totalCategoryCount,totalProductCount,totalBrandCount,CreateCoupon,listCoupon} = require('../controllers/adminControllers')
+const {adminLogin,allUsers,deleteUser,blockUser,unBlockUser,addProduct,addCategory,addSubCategory,listAllCategory,listAllSubcategory,listProducts,addBrand,listBrands,getProduct,editProduct,deleteProduct,totalUserCount,totalCategoryCount,totalProductCount,totalBrandCount,CreateCoupon,listCoupon,getAllOrders,totalOrder,orderEdit} = require('../controllers/adminControllers')
 const verifyAdminToken = require('../middlewares/verifyAdmin')
-const upload = require('../middlewares/productMulter')
+const upload = require('../middlewares/productMulter');
+const orderModel = require('../models/orderModel');
 
 //admin login page router
 router.get('/',function(req, res) {
@@ -38,10 +39,11 @@ router.post('/login',(req,res)=>{
 router.get('/dashboard',verifyAdminToken,async(req,res)=>{
   const userCount = await totalUserCount()
   const productCount = await totalProductCount()
+  const orderCount= await totalOrder()
   const categoryCount = await totalCategoryCount()
   const brandCount = await totalBrandCount()
   const coupon = await listCoupon()
-  res.render('admin/adminHome',{userCount,productCount,categoryCount,brandCount,coupon})
+  res.render('admin/adminHome',{userCount,productCount,categoryCount,brandCount,coupon,orderCount})
 })
 
 //user details router
@@ -204,10 +206,6 @@ router.get('/deleteProduct/:id',verifyAdminToken,(req,res)=>{
      })
 })
 
-router.get('/viewProduct',verifyAdminToken,(req,res)=>{
-  res.render('admin/viewProduct')
-})
-
 router.get('/addCoupon',verifyAdminToken,(req,res)=>{
    res.render('admin/addCoupon',{err:req.session.couponCodeErr})
    req.session.couponCodeErr=null
@@ -222,5 +220,119 @@ router.post('/addCoupon',(req,res)=>{
   })
 
 })
+
+router.get('/order',async(req,res)=>{  
+  const order = await getAllOrders()
+  if(order){
+    res.render('admin/orderView',{Order:order.product})
+  }
+  res.render('admin/orderView')
+})
+
+router.get('/editOrder/:id/:user',async(req,res)=>{
+  const orderId=req.params.id
+  const user=req.params.user
+  res.render('admin/editOrder',{orderId,user})
+})
+
+router.post('/orderEdit/:id/:user',(req,res)=>{
+   orderEdit(req.params.id,req.params.user,req.body).then((result)=>{
+     res.redirect('/admin/order')
+   })
+})
+
+
+router.post('/getChartData',async(req,res)=>{
+
+  console.log(req.body);
+  let {startDate,endDate} = req.body
+
+  let d1, d2, text;
+  if (!startDate || !endDate) {
+      d1 = new Date();
+      d1.setDate(d1.getDate() - 7);
+      d2 = new Date();
+      text = "For the Last 7 days";
+    } else {
+      d1 = new Date(startDate);
+      d2 = new Date(endDate);
+      text = `Between ${startDate} and ${endDate}`;
+    }
+ 
+
+// Date wise sales report
+const date = new Date(Date.now());
+const month = date.toLocaleString("default", { month: "long" });
+
+let salesReport = await orderModel.aggregate([
+{
+  $match: {
+    created: {
+      $lt: d2,
+      $gte: d1,
+    },
+  },
+},
+{
+  $group: {
+    _id: { $dayOfMonth: "$created" },
+    total: { $sum: "$netAmount" },
+  },
+},
+]);
+
+let dateArray = [];
+let totalArray = [];
+salesReport.forEach((s) => {
+dateArray.push(`${month}-${s._id} `);
+totalArray.push(s.total);
+});
+
+let brandReport = await orderModel.aggregate([{
+  $unwind: "$product",
+},{
+  $project:{
+      brand: "$product.brand",
+      subTotal:"$product.subtotal"
+  }
+},{
+  $group:{
+      _id:'$brand',
+   totalAmount: { $sum: "$subTotal" },
+
+  }
+}
+
+])
+
+
+let orderCount = await orderModel.find({created:{$gt : d1, $lt : d2}}).count()
+
+let Sales = 0;
+
+salesReport.map((t) => {
+  Sales += t.total
+})
+
+
+let success  = await orderModel.find({'products.paid':'Paided'})
+
+let successPayment = 0;
+
+success.map((e)=>{
+  successPayment += e.netAmount
+})
+
+let brandArray = [];
+let sumArray = [];
+brandReport.forEach((s) => {
+brandArray.push(s._id);
+sumArray.push(s.totalAmount);
+});
+
+  res.json({dateArray,totalArray,brandArray,sumArray,orderCount,Sales,successPayment})
+
+ })
+
 
 module.exports = router;

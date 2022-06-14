@@ -1,44 +1,44 @@
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
 // Address Schema
 const AddressSchema = new Mongoose.Schema({
   user: {
     type: String,
   },
-  id:{
-    type:String
-  },
-  name:{
+  id: {
     type: String,
   },
-  phone_number:{
-   type:Number
+  name: {
+    type: String,
+  },
+  phone_number: {
+    type: Number,
   },
   address: {
-    type: String
+    type: String,
   },
   city: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
   },
-  district:{
+  district: {
     type: String,
   },
   zipCode: {
-    type: Number
+    type: Number,
   },
   isDefault: {
     type: Boolean,
-    default: false
+    default: false,
   },
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-const addressModel= Mongoose.model('Address', AddressSchema);
+const addressModel = Mongoose.model("Address", AddressSchema);
 
-module.exports=addressModel
+module.exports = addressModel;

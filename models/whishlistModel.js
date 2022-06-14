@@ -1,26 +1,23 @@
-const Mongoose = require('mongoose')
-
+const Mongoose = require("mongoose");
 
 const WishlistSchema = new Mongoose.Schema({
-    user: {
-    type:String,
-    default: null
+  user: {
+    type: String,
+    default: null,
+  },
+  product: [
+    {
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: "Products",
+      default: null,
     },
-    product:[
-      {
-      type:Mongoose.Schema.Types.ObjectId,
-      ref: 'Products',
-      default: null
-      }
-    ],
-    created: {
-      type: Date,
-      default: Date.now
-    }
-  });
+  ],
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-  
 const whishlistModel = Mongoose.model("Whishlist", WishlistSchema);
 
-
-module.exports=whishlistModel;
+module.exports = whishlistModel;

@@ -13,15 +13,19 @@
                     <div class="col"> <strong>Estimated Delivery time:</strong> <br>{{result.deliverDate}}</div>
                     <div class="col"> <strong>Shipping BY:</strong> <br> {{address.name}}<br><i class="fa fa-phone"></i> +91{{address.phone_number}}</div>
                     <div class="col"> <strong>Status:</strong> <br> {{result.status}} </div>
-                    <div class="col"> <strong>Tracking #:</strong> <br> BD045903594059 </div>
+                    <div class="col"> <strong>Paid</strong> <br> {{result.paid}} </div>
                 </div>
             </article>
             <div class="track">
-                
+                {{#if result.active}}
                 <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
                 <div class="step"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Picked by courier</span> </div>
                 <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text"> On the way </span> </div>
                 <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Ready for pickup</span> </div>
+                {{else}}
+                  <div class="step active1"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
+                 <div class="step active1"> <span class="icon"> <i class="fa fa-ban"></i> </span> <span class="text">Canceled</span> </div>
+                {{/if}}
             </div>
             <hr>
             <ul class="row">
@@ -47,9 +51,22 @@
     $(document).ready(function() {
         const div=document.getElementsByClassName("step")
         var status = "{{result.status}}";
+        console.log(status)
         if(status == "Order placed"){
           div[0].classList.add("active")
-        }else if()
+        }else if(status == "Picked by courier"){
+             div[0].classList.add("active")
+             div[1].classList.add("active")
+        }else if(status == "On the way"){
+            div[0].classList.add("active")
+            div[1].classList.add("active")
+            div[2].classList.add("active")
+        }else if(status == "Ready for pickup"){
+            div[0].classList.add("active")
+            div[1].classList.add("active")
+            div[2].classList.add("active")
+            div[3].classList.add("active")
+        }
     });
 })(jQuery);
 </script>

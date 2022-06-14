@@ -11,6 +11,7 @@ const orderModel = require('../models/orderModel')
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const geodist = require('geodist')
 const fs = require('fs');
+const pdf = require('pdf-creator-node');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const {userSignupvalidation,userLoginValidation,forgetpasswordValidation,resetpasswordValidation,updateProfileValidation} = require('../validations/userValidation')
@@ -23,7 +24,7 @@ const pincodeDirectory = require('india-pincode-lookup');
 const moment = require('moment');
 const Razorpay = require('razorpay');
 const crypto =require('crypto')
-const { resolve } = require('path')
+const options=require('../util/option')
 require('dotenv').config()
 
 //razorpay instance
@@ -360,21 +361,21 @@ const userCart = (proId,userData,) =>{
    return new Promise(async(resolve,reject)=>{
      const product = await ProductModel.findById({_id:proId})
      const cart = await cartModel.findOne({userId:userData})
-
+     const Brand=await brandModel.findById({_id:product.brand})
      if(cart){
          const proExist = cart.products.findIndex(product => product.productId==proId)
 
          if(proExist!=-1){
             return resolve({status:false,error:"Product already added to cart"})
          }else{
-         await cartModel.findOneAndUpdate({userId:userData},{$push:{products:{productId:proId,quantity:1,name:product.productName,price:product.price,brand:product.brand,shippingcost:product.shippingCost,discountPrice:product.discountPrice,image:product.image[0].proImg1}}}).then(async(res)=>{
+         await cartModel.findOneAndUpdate({userId:userData},{$push:{products:{productId:proId,quantity:1,name:product.productName,price:product.price,brand:Brand.brand,shippingcost:product.shippingCost,discountPrice:product.discountPrice,image:product.image[0].proImg1,description:product.description}}}).then(async(res)=>{
           return resolve({status:true,msge:"New product add in cart.",count:res.products.length+1})
         })
          }
       }else{
       const newCart = new cartModel({
           userId:userData,
-          products:{productId:proId,quantity:1,name:product.productName,price:product.price,brand:product.brand,shippingcost:product.shippingCost,discountPrice:product.discountPrice,image:product.image[0].proImg1},
+          products:{productId:proId,quantity:1,name:product.productName,price:product.price,brand:Brand.brand,shippingcost:product.shippingCost,discountPrice:product.discountPrice,image:product.image[0].proImg1,description:product.description},
       })
       await newCart.save(async(err,res)=>{
         if(err){
@@ -514,8 +515,9 @@ const totalAmount = (user) =>{
  
     const Total = amount.pop()
     if (Total!=undefined) {
-      const cost=await cartModel.findOne({userId:user})
-      const totalAmount = Total.total + cost.shippingcost - cost.discountPrice
+      const cost=await cartModel.findOne({userId:user})     
+      const totalAmount = Total.total + cost.shippingcost - cost.discountPrice   
+      await cartModel.findOneAndUpdate({userId:user},{$set:{subTotalAddedd:Total.total}})
       await cartModel.findOneAndUpdate({userId:user},{$set:{total:totalAmount}})
       resolve({totalAmount,Total})
     }
@@ -814,16 +816,22 @@ const AddNewAddress = (id) =>{
 const mensFashion = () =>{
   return new Promise(async(resolve,reject)=>{
     const fashion = await SubCategoryModel.findOne({subcategory:"men"})
-    const product = await ProductModel.find({SubCategory:fashion._id}).limit(7).lean()
-    resolve(product)
+    if(fashion){
+      const product = await ProductModel.find({SubCategory:fashion._id}).limit(7).lean()
+      resolve(product)
+    }
+    resolve()
   })
 }
 
 const AppleBrandProducts = () =>{
   return new Promise(async(resolve,reject)=>{
-    const brand = await brandModel.findOne({brand:"apple"})
-    const product = await ProductModel.find({brand:brand._id}).limit(7).lean()
-    resolve(product)
+    const brand = await brandModel.findOne({brand:"iphone"})
+    if(brand){
+      const product = await ProductModel.find({brand:brand._id}).limit(7).lean()
+      resolve(product)
+    }
+    resolve()
   })
 }
 
@@ -835,16 +843,22 @@ const newOrder = (data,payment) =>{
 
     const proDetails=[]
 
-    cart.products.forEach((pro)=>{
-         proDetails.push({ProductId:pro.productId,name:pro.name,price:pro.price,brand:pro.brand,image:pro.image,quantity:pro.quantity,subtotal:pro.total,created:todayDateFormat,paymentType:payment})
-    })
-
+    if(cart){
+      cart.products.forEach((pro)=>{
+        proDetails.push({ProductId:pro.productId,name:pro.name,price:pro.price,brand:pro.brand,image:pro.image,quantity:pro.quantity,subtotal:pro.total,created:todayDateFormat,paymentType:payment,user:data,description:pro.description})
+     })
+    }else{
+      resolve()
+    }
+  
+    if(cart){
     const AfterCoupon=cart.total-cart.couponDiscount
 
     const newOrder = new orderModel({
       user:data,
       product:proDetails,
       total:cart.total,
+      subTotalAddedd:cart.subTotalAddedd,
       shippingcost:cart.shippingcost,
       discountPrice:cart.discountPrice,
       couponDiscount:cart.couponDiscount,
@@ -858,9 +872,18 @@ const newOrder = (data,payment) =>{
         return reject({status:false,error:"Something went wrong try again."})
       }
 
+      res.product.forEach(async(result)=>{
+         let product =  await ProductModel.findByIdAndUpdate({_id:result.ProductId},{ $inc: { stock: -result.quantity }})
+        if(product.stock<5){
+          await ProductModel.findByIdAndUpdate({_id:result.ProductId},{$set:{stockLess:true}})
+        }
+      }) 
+    
       return resolve({status:true,msge:"order created successfully.",data:res})
    })
-
+  }else{
+    resolve()
+  }
  })
 }
 
@@ -936,31 +959,35 @@ const getDirection = (Order) =>{
   const lat=coordinate[1]
   
   var dist = geodist({lat:ourlng, lon:ourlat}, {lat: lng, lon:lat},{exact: true, unit: 'km'})
-
+ 
     if(dist==0){
       var dt = new Date();
       var deliverDate=dt.setDate(dt.getDate() + 1);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
        await orderModel.updateMany({_id:Order.data._id},{$set:{'product.$[].deliverDate':todayDateFormat}})
-       return resolve({status:true})
+       await orderModel.updateMany({_id:Order.data._id},{$set:{deliverDate:todayDateFormat}})
+       return resolve({status:true,date:todayDateFormat})
     }else if(dist>=50 && dist<=100){
       var dt = new Date();
       var deliverDate=dt.setDate(dt.getDate() + 2);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({_id:Order.data._id},{$set:{'product.$[].deliverDate':todayDateFormat}})
-      return resolve({status:true})
+      await orderModel.updateMany({_id:Order.data._id},{$set:{deliverDate:todayDateFormat}})
+      return resolve({status:true,date:todayDateFormat})
     }else if(dist>=100){
       var dt = new Date();
       var deliverDate=dt.setDate(dt.getDate() + 4);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({_id:Order.data._id},{$set:{'product.$[].deliverDate':todayDateFormat}})
-      return resolve({status:true})
+      await orderModel.updateMany({_id:Order.data._id},{$set:{deliverDate:todayDateFormat}})
+      return resolve({status:true,date:todayDateFormat})
     }else{
       var dt = new Date();
       var deliverDate=dt.setDate(dt.getDate() + 6);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
-      await orderModel.findByIdAndUpdate({_id:Order.data._id},{$set:{deliverDate:todayDateFormat}})
-      return resolve({status:true})
+      await orderModel.updateMany({_id:Order.data._id},{$set:{'product.$[].deliverDate':todayDateFormat}})
+      await orderModel.updateMany({_id:Order.data._id},{$set:{deliverDate:todayDateFormat}})
+      return resolve({status:true,date:todayDateFormat})
     }
    
   })
@@ -989,7 +1016,6 @@ const orderCancel = (orderId) =>{
 }
 
 const orderTrack = (id) =>{
-  console.log(id);
   return new Promise(async(resolve,reject)=>{
   const order= await orderModel.findOne({'product._id':id}).lean()
    order.product.forEach((result)=>{
@@ -1000,4 +1026,100 @@ const orderTrack = (id) =>{
   })
 }
 
-module.exports={userSignup,userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,subTotal,couponDetails,checkCouponCode,saveWishlist,getWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,billingAddress,getAddress,conformAddress,shippingAddress,AddNewAddress,mensFashion,AppleBrandProducts,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack}
+const paymentFailed = (id) =>{
+
+  return new Promise(async(resolve,reject)=>{
+
+     await orderModel.findOneAndUpdate({_id:id['orderDetails[receipt]']},{$set:{'product.$[].paid':"Payment failed"}})
+     await orderModel.findOneAndUpdate({_id:id['orderDetails[receipt]']},{$set:{'product.$[].status':"Payment failed"}})
+     await orderModel.findOneAndUpdate({_id:id['orderDetails[receipt]']},{$set:{'product.$[].active':false}})
+     await orderModel.findOneAndUpdate({_id:id['orderDetails[receipt]']},{$set:{'product.$[].cancel':true}})
+     var todayDateFormat = moment(new Date()).format("ddd MMM DD YYYY")
+     await orderModel.findOneAndUpdate({_id:id['orderDetails[receipt]']},{$set:{'product.$[].cancelDate':todayDateFormat}})
+     resolve()
+  })
+  
+}
+
+const generatePdf = (order,User,date) =>{
+
+  return new Promise(async(resolve,reject)=>{
+
+    const html = fs.readFileSync(path.join(__dirname, '../views/invoice.html'), 'utf-8');
+    const product=[]
+    const todayDateFormat = moment(new Date()).format("ddd MMM DD YYYY")
+
+    order.data.product.forEach(async(result)=>{
+
+      const prod={
+        product:result.name,
+        description:result.description,
+        image:result.image,
+        quantity:result.quantity,
+        price:result.price,
+        subtotal:result.subtotal,
+        status:result.status,
+        user:result.user,
+        payment:result.paymentType,
+      }
+
+      product.push(prod)
+    })
+
+
+    const Address=[]
+
+    const isDefault = await addressModel.find({user:User}).lean()
+
+   isDefault.map((address)=>{
+     if(address.isDefault==true){
+        Address.push(address)
+     }
+   }) 
+
+   const obj = {
+    prodlist:product,
+    subtotal:order.data.subTotalAddedd,
+    shippingaddress:Address,
+    shipCost:order.data.shippingcost,
+    discount:order.data.discountPrice,
+    coupon:order.data.couponDiscount,
+    item:order.data.count,
+    Today:todayDateFormat,
+    Date:date,
+    gtotal:order.data.total
+}
+  
+const filename = order.data.user + Math.floor(100000 + Math.random() * 900000) + '.pdf';
+
+const document = {
+  html: html,
+  data: {
+      products: obj
+  },
+  path: './docs/' + filename
+}
+
+pdf.create(document, options).then(res => {
+    console.log(res);
+}).catch(error => {
+    console.log(error);
+});
+
+const filepath = 'http://localhost:5000/docs/' + filename;
+ 
+resolve(filepath)
+
+})
+}
+
+const productSerach = (searchString) =>{
+  return new Promise(async(resolve,reject)=>{
+    const products =  await ProductModel.find({$text: {$search: searchString}}).limit(6).lean()
+    resolve(products)
+  })
+}
+
+
+
+module.exports={userSignup,userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,subTotal,couponDetails,checkCouponCode,saveWishlist,getWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,billingAddress,getAddress,conformAddress,shippingAddress,AddNewAddress,mensFashion,AppleBrandProducts,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack,paymentFailed,generatePdf,productSerach,productSerach}

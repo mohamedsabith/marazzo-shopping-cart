@@ -1,122 +1,137 @@
-  <div class="container-scroller">
-    {{>admin-sidebar}}
-      <div class="main-panel">        
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">EDIT A PRODUCTS</h4>
-                  <p style="color: red;">{{err}}</p>
-                  <p class="card-description">
-                   Let's edit a product.
-                  </p>
-                  <form class="forms-sample" action="/admin/editProduct/{{product._id}}" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label for="exampleInputName1">Product Name</label>
-                      <input type="text" class="form-control" id="exampleInputName1" name="product_name" value="{{product.productName}}" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail3">Saling Price</label>
-                      <input type="text" class="form-control" id="exampleInputEmail3" name="product_price" value="{{product.price}}" required>
-                    </div>
-                      <div class="form-group">
-                      <label for="exampleInputEmail3">Original Price</label>
-                      <input type="text" class="form-control" id="exampleInputEmail3" name="originalPrice" value="{{product.originalPrice}}" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword4">Stock</label>
-                      <input type="text" class="form-control" id="exampleInputPassword4" name="stock" value="{{product.stock}}" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleSelectGender">Category</label>
-                        <select name="category" class="form-control" id="exampleSelectGender" required>
-                          <option value="{{product.SubCategory.subcategory}}">{{product.SubCategory.subcategory}}</option>
-                          {{#each category}}
-                          <option value="{{this.subcategory}}">{{this.subcategory}}</option>
-                          {{/each}}
-                        </select>
-                      </div>
-                    <div class="form-group"> 
-                      <img src="/products/{{product.image.[0].proImg1}}" alt="img" height="50px" width="50px" id="imgView1">
-                      <input type="text" name="image1" value="{{product.image.[0].proImg1}}" style="display: none;">
-                      <div class="input-group col-xs-12">
-                        <input name="product_img" type="file" class="form-control" accept="image/*"  onchange="viewImage(event)">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                        <img src="/products/{{product.image.[0].proImg2}}" alt="img" height="50px" width="50px" id="imgView2">
-                        <input type="text" name="image2" value="{{product.image.[0].proImg2}}" style="display: none;">
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img1" type="file" class="form-control" accept="image/*" onchange="viewImage1(event)">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                        <img src="/products/{{product.image.[0].proImg3}}" alt="img" height="50px" width="50px" id="imgView3">
-                        <input type="text" name="image3" value="{{product.image.[0].proImg3}}" style="display: none;">
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img2" type="file" class="form-control" accept="image/*"  onchange="viewImage2(event)">
-                      </div>
-                    </div>
-                    <div class="col">
-                    <div class="form-group">
-                        <img src="/products/{{product.image.[0].proImg4}}" alt="img" height="50px" width="50px" id="imgView4">
-                        <input type="text" name="image4" value="{{product.image.[0].proImg4}}" style="display: none;">
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img3" type="file" class="form-control" accept="image/*" onchange="viewImage3(event)">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Description</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="description" value="{{product.description}}" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleSelectGender">Brand</label>
-                         <select name="brand" class="form-control" id="exampleSelectGender" required>
-                           <option value="{{product.brand.brand}}" selected>{{product.brand.brand}}</option>
-                          {{#each brands}}
-                          <option value="{{this.brand}}">{{this.brand}}</option>
-                          {{/each}}
-                         </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Shipping Cost</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="shipping_cost" required value="{{product.shippingCost}}">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Discount Price</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="discount" value="{{product.discountPrice}}" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
+<div class="container-scroller">
+  {{>admin-sidebar}}
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">EDIT A PRODUCTS</h4>
+              <p style="color: red;">{{err}}</p>
+              <p class="card-description">
+                Let's edit a product.
+              </p>
+              <form class="forms-sample" action="/admin/editProduct/{{product._id}}" method="post"
+                enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="exampleInputName1">Product Name</label>
+                  <input type="text" class="form-control" id="exampleInputName1" name="product_name"
+                    value="{{product.productName}}" required>
                 </div>
-              </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail3">Saling Price</label>
+                  <input type="text" class="form-control" id="exampleInputEmail3" name="product_price"
+                    value="{{product.price}}" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail3">Original Price</label>
+                  <input type="text" class="form-control" id="exampleInputEmail3" name="originalPrice"
+                    value="{{product.originalPrice}}" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword4">Stock</label>
+                  <input type="text" class="form-control" id="exampleInputPassword4" name="stock"
+                    value="{{product.stock}}" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleSelectGender">Category</label>
+                  <select name="category" class="form-control" id="exampleSelectGender" required>
+                    <option value="{{product.SubCategory.subcategory}}">{{product.SubCategory.subcategory}}</option>
+                    {{#each category}}
+                    <option value="{{this.subcategory}}">{{this.subcategory}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <img src="/products/{{product.image.[0].proImg1}}" alt="img" height="50px" width="50px" id="imgView1">
+                  <input type="text" name="image1" value="{{product.image.[0].proImg1}}" style="display: none;">
+                  <div class="input-group col-xs-12">
+                    <input name="product_img" type="file" class="form-control" accept="image/*"
+                      onchange="viewImage(event)">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <img src="/products/{{product.image.[0].proImg2}}" alt="img" height="50px" width="50px" id="imgView2">
+                  <input type="text" name="image2" value="{{product.image.[0].proImg2}}" style="display: none;">
+                  <div class="input-group col-xs-12">
+                    <input name="thumb_img1" type="file" class="form-control" accept="image/*"
+                      onchange="viewImage1(event)">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <img src="/products/{{product.image.[0].proImg3}}" alt="img" height="50px" width="50px" id="imgView3">
+                  <input type="text" name="image3" value="{{product.image.[0].proImg3}}" style="display: none;">
+                  <div class="input-group col-xs-12">
+                    <input name="thumb_img2" type="file" class="form-control" accept="image/*"
+                      onchange="viewImage2(event)">
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <img src="/products/{{product.image.[0].proImg4}}" alt="img" height="50px" width="50px"
+                      id="imgView4">
+                    <input type="text" name="image4" value="{{product.image.[0].proImg4}}" style="display: none;">
+                    <div class="input-group col-xs-12">
+                      <input name="thumb_img3" type="file" class="form-control" accept="image/*"
+                        onchange="viewImage3(event)">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Description</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="description"
+                      value="{{product.description}}" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleSelectGender">Brand</label>
+                    <select name="brand" class="form-control" id="exampleSelectGender" required>
+                      <option value="{{product.brand.brand}}" selected>{{product.brand.brand}}</option>
+                      {{#each brands}}
+                      <option value="{{this.brand}}">{{this.brand}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Shipping Cost</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="shipping_cost" required
+                      value="{{product.shippingCost}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Discount Price</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="discount"
+                      value="{{product.discountPrice}}" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary me-2">Submit</button>
+                  <button class="btn btn-light">Cancel</button>
+              </form>
             </div>
           </div>
         </div>
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank"> Shopping Website</a></span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
-          </div>
-        </footer>
       </div>
     </div>
+    <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank">
+            Shopping Website</a></span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+          reserved.</span>
+      </div>
+    </footer>
   </div>
+</div>
+</div>
 
 <script type="text/javascript">
-   function viewImage(event){
-     console.log(event.target.files)
-     document.getElementById("imgView1").src=URL.createObjectURL(event.target.files[0])
-   }
-    function viewImage1(event){
-     document.getElementById("imgView2").src=URL.createObjectURL(event.target.files[0])
-   }
-     function viewImage2(event){
-     document.getElementById("imgView3").src=URL.createObjectURL(event.target.files[0])
-   }
-     function viewImage3(event){
-     document.getElementById("imgView4").src=URL.createObjectURL(event.target.files[0])
-   }
+  function viewImage(event) {
+    console.log(event.target.files)
+    document.getElementById("imgView1").src = URL.createObjectURL(event.target.files[0])
+  }
+  function viewImage1(event) {
+    document.getElementById("imgView2").src = URL.createObjectURL(event.target.files[0])
+  }
+  function viewImage2(event) {
+    document.getElementById("imgView3").src = URL.createObjectURL(event.target.files[0])
+  }
+  function viewImage3(event) {
+    document.getElementById("imgView4").src = URL.createObjectURL(event.target.files[0])
+  }
 </script>

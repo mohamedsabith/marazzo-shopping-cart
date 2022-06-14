@@ -81,7 +81,7 @@
               <div class="sidebar-widget-body m-t-10">
                 <div class="price-range-holder"> <span class="min-max"> <span class="pull-left">$200.00</span> <span class="pull-right">$800.00</span> </span>
                   <input type="text" id="amount" style="border:0; color:#666666; font-weight:bold;text-align:center;">
-                  <input type="text" class="price-slider" value="" >
+                  <input type="text" id="filter" class="price-slider" value="" >
                 </div>
                 <a  class="lnk btn btn-primary">Show Now</a> </div>
             </div>
@@ -163,8 +163,8 @@
               <div class="pagination-container">
                 <ul class="list-inline list-unstyled">
                   <li class="prev"><a ><i class="fa fa-angle-left"></i></a></li>
-                  <li><a >1</a></li>
-                  <li class="active"><a >2</a></li>
+                  <li class="active"><a >1</a></li>
+                  <li><a >2</a></li>
                   <li><a >3</a></li>
                   <li><a >4</a></li>
                   <li class="next"><a ><i class="fa fa-angle-right"></i></a></li>
@@ -187,7 +187,7 @@
                       <div class="product">
                         <div class="product-image">
                           <div class="image"> 
-                          <a >
+                          <a href="/viewProduct/{{this._id}}">
                              <img src="/products/{{this.image.[0].proImg2}}" alt=""> 
                               <img src="/products/{{this.image.[0].proImg1}}" alt="" class="hover-image">
                           </a> 
@@ -204,10 +204,10 @@
                           <div class="action">
                             <ul class="list-unstyled">
                               <li class="add-cart-button btn-group">
-                                <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
-                                <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
+                                <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"  onclick="addToCart('{{this._id}}')"></i> </button>
+                                <button class="btn btn-primary cart-btn" type="button"  onclick="addToCart('{{this._id}}')">Add to cart</button>
                               </li>
-                              <li class="lnk wishlist"> <a class="add-to-cart"  title="Wishlist"> <i class="icon fa fa-heart"></i> </a> </li>
+                              <li class="lnk wishlist"> <a class="add-to-cart"  title="Wishlist" onclick="addWishlist('{{this._id}}')"> <i class="icon fa fa-heart"></i> </a> </li>
                               <li class="lnk"> <a class="add-to-cart" title="Compare"> <i class="fa fa-signal"></i> </a> </li>
                             </ul>
                           </div>
@@ -231,7 +231,10 @@
                       <div class="row product-list-row">
                         <div class="col col-sm-3 col-lg-3">
                           <div class="product-image">
-                            <div class="image"> <img src="/products/{{this.image.[0].proImg3}}" alt=""> </div>
+                            <div class="image"> 
+                              <a href="/viewProduct/{{this._id}}">
+                            <img src="/products/{{this.image.[0].proImg3}}" alt=""> </div>
+                              </a>
                           </div>
                         </div>
                         <div class="col col-sm-9 col-lg-9">
@@ -246,11 +249,11 @@
                               <div class="action">
                                 <ul class="list-unstyled">
                                   <li class="add-cart-button btn-group">
-                                    <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
-                                    <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
+                                    <button class="btn btn-primary icon" data-toggle="dropdown" type="button" onclick="addToCart('{{this._id}}')"> <i class="fa fa-shopping-cart"></i> </button>
+                                    <button class="btn btn-primary cart-btn" type="button" onclick="addToCart('{{this._id}}')">Add to cart</button>
                                   </li>
-                                  <li class="lnk wishlist"> <a class="add-to-cart"  title="Wishlist"> <i class="icon fa fa-heart"></i> </a> </li>
-                                  <li class="lnk"> <a class="add-to-cart"  title="Compare"> <i class="fa fa-signal"></i> </a> </li>
+                                  <li class="lnk wishlist"> <a class="add-to-cart"  title="Wishlist" onclick="addWishlist('{{this._id}}')"> <i class="icon fa fa-heart"></i> </a> </li>
+                                  <li class="lnk"> <a class="add-to-cart"  title="Compare" > <i class="fa fa-signal"></i> </a> </li>
                                 </ul>
                               </div>
                             </div>
@@ -271,8 +274,8 @@
               <div class="pagination-container">
                 <ul class="list-inline list-unstyled">
                   <li class="prev"><a ><i class="fa fa-angle-left"></i></a></li>
-                  <li><a >1</a></li>
-                  <li class="active"><a >2</a></li>
+                  <li class="active"><a >1</a></li>
+                  <li><a >2</a></li>
                   <li><a >3</a></li>
                   <li><a >4</a></li>
                   <li class="next"><a ><i class="fa fa-angle-right"></i></a></li>
@@ -327,3 +330,64 @@
     </div>
   </div>
 {{>user-footer}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+function addToCart(proId){
+    $.ajax({
+        url:'/cart/'+proId,
+        method:'get',
+        success:(response)=>{
+           if(response.error){
+              swal("A product already exists in cart.", {
+                    icon: "error",
+                    })
+           }else if(response.msge){
+                  swal("Cart successfully updated.", {
+                    icon: "success",
+                    showConfirmButton: false,
+                    buttons: false,
+                    timer: 1500
+                    })
+            $('#cart-count').html(response.count)
+           }else{
+             window.location = "/login"
+           }
+        }
+    })
+}
+
+function addWishlist(proId){
+   $.ajax({
+        url:'/wishlistAdd/'+proId,
+        method:'get',
+        success:(response)=>{
+          if(response.errWishlist){
+            swal("Product already added.", {
+            icon: "warning",
+            })
+          }else if(response.msge){
+           swal("Added to your Wishlist", {
+              icon: "success",
+              showConfirmButton: false,
+              buttons: false,
+              timer: 1500
+            })
+          }else{
+            window.location = "/login"
+          }
+        }
+    })
+}
+
+const source = document.getElementById('filter');
+
+console.log(source)
+
+const inputHandler = function(e) {
+  console.log(e.target.value)
+}
+
+source.addEventListener('input', inputHandler);
+source.addEventListener('propertychange', inputHandler);
+</script>

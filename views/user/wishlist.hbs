@@ -127,8 +127,11 @@ function addToCart(proId){
                     icon: "error",
                     })
            }else{
-           swal("Cart successfully updated.", {
+            swal("Cart successfully updated.", {
                     icon: "success",
+                    showConfirmButton: false,
+                    buttons: false,
+                    timer: 1500
                     })
             $('#cart-count').html(response.count)
            }

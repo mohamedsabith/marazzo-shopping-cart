@@ -10,6 +10,8 @@ const categoryModel = require('../models/categoryModel')
 const SubCategoryModel =  require('../models/subCategoryModel')
 const brandModel = require('../models/brandModel')
 const DiscountsModel = require('../models/discountModel');
+const orderModel = require('../models/orderModel');
+const { resolve } = require('path');
 require('dotenv').config()
 
 //admin login
@@ -338,6 +340,13 @@ const totalCategoryCount = () =>{
     })
 }
 
+const totalOrder = () =>{
+  return new Promise(async(resolve,reject)=>{
+    const orders=await orderModel.count()
+    resolve(orders)
+  })
+}
+
 const CreateCoupon = (data) =>{
   return new Promise(async(resolve,reject)=>{
 
@@ -387,4 +396,23 @@ const listCoupon = () =>{
     })
 }
 
-module.exports={adminLogin,allUsers,deleteUser,blockUser,unBlockUser,addProduct,addCategory,addSubCategory,addBrand,listAllCategory,listAllSubcategory,listBrands,listProducts,getProduct,editProduct,deleteProduct,totalCategoryCount,totalProductCount,totalUserCount,totalBrandCount,CreateCoupon,listCoupon}
+const getAllOrders = () =>{
+    return new Promise(async(resolve,reject)=>{
+     const order = await orderModel.find({}).lean()
+      order.forEach((res)=>{
+        resolve({product:res.product})
+      })
+       resolve()
+    })
+}
+
+const orderEdit = (id,User,data) =>{
+    return new Promise(async(resolve,reject)=>{
+        await orderModel.updateOne({user:User,product:{$elemMatch:{_id:id}}},{$set:{'product.$.status':data.status}})
+        await orderModel.updateOne({user:User,product:{$elemMatch:{_id:id}}},{$set:{'product.$.paid':data.paid}})
+        resolve()
+    }) 
+}
+
+
+module.exports={adminLogin,allUsers,deleteUser,blockUser,unBlockUser,addProduct,addCategory,addSubCategory,addBrand,listAllCategory,listAllSubcategory,listBrands,listProducts,getProduct,editProduct,deleteProduct,totalCategoryCount,totalProductCount,totalUserCount,totalBrandCount,CreateCoupon,listCoupon,getAllOrders,orderEdit,totalOrder}

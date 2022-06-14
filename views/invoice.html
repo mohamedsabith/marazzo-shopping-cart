@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pdf Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
+              <img height="100" width="100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgQ_m4DUpDZtd5CnGPtFUpGMXXEoPWNSVnAA&usqp=CAU" alt="">
+            </td>
+            <td align="left" bgcolor="#ffe77b" style="background-color: #fff;">
+              <h2 style="font-weight: 900;color: brown;">MARAZZO</h2>
+              <p>kottakkal, Malappuram, 676503<br/> 
+                 marazzo.in +555 7 789-1234</p>
+            </td>
+        </tr>
+    </table> 
+    <h1 style="font-size: 30px;font-weight: 600; color: green; margin-top: 10px;">INVOICE</h1>
+    <table width="95%" border="0" cellspacing="0" cellpadding="0">
+      {{#each products.shippingaddress}}
+      <tr>
+          <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
+            <p>Invoice To:</p>
+            <h3 style="font-weight: 800;color: brown;">{{this.user}}</h3>
+          </td>
+          <td width="70%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
+          </td>
+      </tr>
+      {{/each}}
+      {{#each products.shippingaddress}}
+      <tr>
+        <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
+          <p>{{this.address}}</p>
+          <p>{{this.city}}</p>
+        </td>
+        <td width="70%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
+        </td>
+      </tr>
+      {{/each}}
+  </table>  
+      <table width="95%" border="0" cellspacing="0" cellpadding="0">
+        
+        <tr>
+          {{#each products.shippingaddress}}
+          <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
+            <p>+91 {{this.phone_number}}</p>
+            <p>{{this.user}}</p>
+          </td>
+          {{/each}}
+          <td width="40%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
+          </td>
+          <td width="30%" align="right" bgcolor="#ffe77b" style="background-color: #fff;">
+            <h4 style="font-weight: 700;color: #000000;">Date: {{products.Today}}</h4> 
+            <h4 style="font-weight: 700;color: #000000;">Deliver: {{products.Date}}</h4>            
+          </td>
+        </tr>
+      </table>   
+      <table class="table" width="95%">
+          <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Description</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each products.prodlist}}
+            <tr>
+              <td width="10%">
+                <img height="70" width="70" src="/products/{{this.image}}" alt="">
+              </td>
+              <th scope="row" width="50%">
+                <h5 style="font-weight: 700;color:chocolate">{{this.product}}</h5>
+                <p>{{this.description}}</p>
+              </th>
+              <td width="10%">{{this.quantity}}</td>
+              <td width="10%">${{this.price}}</td>
+              <td width="10%">${{this.subtotal}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <table width="95%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90%"  align="right" style="font-size: 25px;font-weight: 600;color:black;">Sub Total</td>
+            <td width="10%" align="right"><h2 style="font-size: 20px;font-weight: 600;color:lightgreen;">${{products.subtotal}}</h2></td>
+          </tr>
+          <tr>
+            <td width="90%"  align="right" style="font-size: 25px;font-weight: 600;color:black; ">Discount</td>
+            <td width="10%" align="right"><h2 style="font-size: 20px;font-weight: 600;color:lightgreen; padding-left: 10px;">${{products.discount}}</h2></td>
+          </tr>
+          <tr>
+            <tr>
+              <td width="90%"  align="right" style="font-size: 25px;font-weight: 600;color:black;">Coupon</td>
+              <td width="10%" align="right" ><h2 style="font-size: 20px;font-weight: 600;color:lightgreen;">${{products.coupon}}</h2></td>
+            </tr>
+            <td width="90%"  align="right" style="font-size: 25px;font-weight: 600;color:black;">Shipping</td>
+            <td width="10%" align="right"><h2 style="font-size: 20px;font-weight: 600;color:lightcoral;">${{products.shipCost}}</h2></td>
+          </tr>
+          <tr>
+            <td width="90%"  align="right" style="font-size: 25px;font-weight: 600;color:black;">Grand Total</td>
+            <td width="10%" align="right"><h2 style="font-size: 22px;font-weight: 600;color:black">${{products.gtotal}}</h2></td>
+          </tr>
+        </table>
+        <table width="95%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="100%"  align="left" style="font-size: 25px;font-weight: 700;color:red; ">Notice:</td>
+          </tr>
+          <tr>
+            <td width="100%"  align="left" style="font-size: 25px;font-weight: 700;color:#000; ">A finance charge of 1.5% will be made on unpaid balances after 30 days.</td>
+          </tr>
+        </table>
+</body>
+</html>

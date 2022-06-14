@@ -1,0 +1,422 @@
+{{>user-header token=token totalAmt=totalAmt}}
+{{>user-navbar categories=categories countCart=countCart}}
+<link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,900" rel="stylesheet">
+<style>
+  * {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#notfound {
+  position: relative;
+  height: 80vh;
+}
+
+#notfound .notfound {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.notfound {
+  max-width: 920px;
+  width: 100%;
+  line-height: 1.4;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.notfound .notfound-404 {
+  position: absolute;
+  height: 100px;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: -1;
+}
+
+.notfound .notfound-404 h1 {
+  font-family: 'Maven Pro', sans-serif;
+  color: #ececec;
+  font-weight: 900;
+  font-size: 276px;
+  margin: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.notfound h2 {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 46px;
+  color: #000;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0px;
+}
+
+.notfound p {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 16px;
+  color: #000;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-top: 15px;
+}
+
+.notfound a {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: #189cf0;
+  display: inline-block;
+  padding: 16px 38px;
+  border: 2px solid transparent;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: 400;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+
+.notfound a:hover {
+  background-color: #fff;
+  border-color: #189cf0;
+  color: #189cf0;
+}
+
+@media only screen and (max-width: 480px) {
+  .notfound .notfound-404 h1 {
+    font-size: 162px;
+  }
+  .notfound h2 {
+    font-size: 26px;
+  }
+}
+</style>
+{{#if searchEmpty}}
+<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>404</h1>
+			</div>
+			<h2>We are sorry, Result not found!</h2>
+			<p>The result you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
+			<a href="/">Back To Homepage</a>
+		</div>
+	</div>
+{{else}}
+<div class="body-content outer-top-vs " id="top-banner-and-menu">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-3 sidebar position-fixed">
+
+
+        <div class="sidebar-widget hot-deals outer-bottom-xs">
+          <h3 class="section-title">Hot deals</h3>
+          <div class="owl-carousel sidebar-carousel custom-carousel owl-theme outer-top-ss">
+            <div class="item">
+              <div class="products">
+                <div class="hot-deal-wrapper">
+                  <div class="image">
+                    <a >
+                      <img src="/images/hot-deals/p13.jpg" alt="">
+                      <img src="/images/hot-deals/p13_hover.jpg" alt="" class="hover-image">
+                    </a>
+                  </div>
+                  <div class="sale-offer-tag"><span>49%<br>
+                      off</span></div>
+                  <div class="timing-wrapper">
+                    <div class="box-wrapper">
+                      <div class="date box"> <span class="key">120</span> <span class="value">DAYS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="hour box"> <span class="key">20</span> <span class="value">HRS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="minutes box"> <span class="key">36</span> <span class="value">MINS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="seconds box"> <span class="key">60</span> <span class="value">SEC</span> </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-info text-left m-t-20">
+                  <h3 class="name"><a >Floral Print Buttoned</a></h3>
+                  <div class="rating rateit-small"></div>
+                  <div class="product-price"> <span class="price"> $600.00 </span> <span
+                      class="price-before-discount">$800.00</span> </div>
+
+                </div>
+                <div class="cart clearfix animate-effect">
+                  <div class="action">
+                    <div class="add-cart-button btn-group">
+                      <button class="btn btn-primary icon" data-toggle="dropdown" type="button" onclick="notAvailable()"> <i
+                          class="fa fa-shopping-cart"></i> </button>
+                      <button class="btn btn-primary cart-btn" type="button" onclick="notAvailable()" disabled>Add to cart</button>
+                    </div>
+                  </div>
+                  <!-- /.action -->
+                </div>
+                <!-- /.cart -->
+              </div>
+            </div>
+            <div class="item">
+              <div class="products">
+                <div class="hot-deal-wrapper">
+                  <div class="image">
+                    <a>
+                      <img src="/images/hot-deals/p14.jpg" alt="">
+                      <img src="/images/hot-deals/p14_hover.jpg" alt="" class="hover-image">
+                    </a>
+                  </div>
+                  <div class="sale-offer-tag"><span>35%<br>
+                      off</span></div>
+                  <div class="timing-wrapper">
+                    <div class="box-wrapper">
+                      <div class="date box"> <span class="key">120</span> <span class="value">Days</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="hour box"> <span class="key">20</span> <span class="value">HRS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="minutes box"> <span class="key">36</span> <span class="value">MINS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="seconds box"> <span class="key">60</span> <span class="value">SEC</span> </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.hot-deal-wrapper -->
+
+                <div class="product-info text-left m-t-20">
+                  <h3 class="name"><a>Floral Print Buttoned</a></h3>
+                  <div class="rating rateit-small"></div>
+                  <div class="product-price"> <span class="price"> $600.00 </span> <span
+                      class="price-before-discount">$800.00</span> </div>
+                  <!-- /.product-price -->
+
+                </div>
+                <!-- /.product-info -->
+
+                <div class="cart clearfix animate-effect">
+                  <div class="action">
+                    <div class="add-cart-button btn-group">
+                      <button class="btn btn-primary icon" data-toggle="dropdown" type="button" onclick="notAvailable()"> <i
+                          class="fa fa-shopping-cart"></i> </button>
+                      <button class="btn btn-primary cart-btn" type="button" onclick="notAvailable()" disabled>Add to cart</button>
+                    </div>
+                  </div>
+                  <!-- /.action -->
+                </div>
+                <!-- /.cart -->
+              </div>
+            </div>
+            <div class="item">
+              <div class="products">
+                <div class="hot-deal-wrapper" >
+                  <div class="image">
+                    <a>
+                      <img src="/images/hot-deals/p15.jpg" alt="">
+                      <img src="/images/hot-deals/p15_hover.jpg" alt="" class="hover-image">
+                    </a>
+                  </div>
+                  <div class="sale-offer-tag"><span>35%<br>
+                      off</span></div>
+                  <div class="timing-wrapper">
+                    <div class="box-wrapper">
+                      <div class="date box"> <span class="key">120</span> <span class="value">Days</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="hour box"> <span class="key">20</span> <span class="value">HRS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="minutes box"> <span class="key">36</span> <span class="value">MINS</span> </div>
+                    </div>
+                    <div class="box-wrapper">
+                      <div class="seconds box"> <span class="key">60</span> <span class="value">SEC</span> </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.hot-deal-wrapper -->
+
+                <div class="product-info text-left m-t-20">
+                  <h3 class="name"><a>Floral Print Buttoned</a></h3>
+                  <div class="rating rateit-small"></div>
+                  <div class="product-price"> <span class="price"> $600.00 </span> <span
+                      class="price-before-discount">$800.00</span> </div>
+                  <!-- /.product-price -->
+
+                </div>
+                <!-- /.product-info -->
+
+                <div class="cart clearfix animate-effect">
+                  <div class="action">
+                    <div class="add-cart-button btn-group">
+                      <button class="btn btn-primary icon" data-toggle="dropdown" type="button" onclick="notAvailable()"> <i
+                          class="fa fa-shopping-cart"></i> </button>
+                      <button class="btn btn-primary cart-btn" type="button" onclick="notAvailable()" disabled>Add to cart</button>
+                    </div>
+                  </div>
+                  <!-- /.action -->
+                </div>
+                <!-- /.cart -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder">
+
+        <div id="product-tabs-slider" class="scroll-tabs outer-top-vs">
+          <div class="more-info-tab clearfix ">
+            <h3 class="new-product-title pull-left">Searched Product</h3>
+          </div>
+          <div class="tab-content outer-top-xs">
+            <div class="tab-pane in active" id="all">
+              <div class="product-slider">
+                <div class="owl-carousel home-owl-carousel custom-carousel owl-theme">
+                  {{#each Searchproduct}}
+                  <div class="item item-carousel">
+                    <div class="products">
+                      <div class="product">
+                        <div class="product-image">
+                          <div class="image">
+                            <a href="/viewProduct/{{this._id}}">
+                              <img src="/products/{{this.image.[0].proImg1}}" alt="">
+                              <img src="/products/{{this.image.[0].proImg2}}" alt="" class="hover-image">
+                            </a>
+                          </div>
+                          <div class="tag new"><span>new</span></div>
+                        </div>
+                        <div class="product-info text-left">
+                          <h3 class="name"><a href="/viewProduct/{{this._id}}">{{this.productName}}</a></h3>
+                          <div class="rating rateit-small"></div>
+                          <div class="description"></div>
+                          <div class="product-price"> <span class="price"> $ {{this.price}}</span> <span
+                              class="price-before-discount">$ {{this.originalPrice}}</span> </div>
+                        </div>
+                        <div class="cart clearfix animate-effect">
+                          <div class="action">
+                            <ul class="list-unstyled">
+                              <li class="add-cart-button btn-group">
+                                <button data-toggle="tooltip" class="btn btn-primary icon" type="button" title="Add Cart" onclick="addToCart('{{this._id}}')"> <i class="fa fa-shopping-cart"></i> </button>
+                               <button class="btn btn-primary cart-btn" type="button" onclick="addToCart('{{this._id}}')">Add to cart</button>
+                              </li>
+                              <li class="lnk wishlist"> <a data-toggle="tooltip" class="add-to-cart" title="Wishlist"> <i onclick="addWishlist('{{this._id}}')" class="icon fa fa-heart"></i> </a></li>
+                              <li class="lnk"> <a data-toggle="tooltip" class="add-to-cart" title="Compare"> <i class="fa fa-signal" aria-hidden="true"></i> </a> </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                 {{/each}}         
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
+<div class="row our-features-box">
+  <div class="container">
+    <ul>
+      <li>
+        <div class="feature-box">
+          <div class="icon-truck"></div>
+          <div class="content-blocks">We ship worldwide</div>
+        </div>
+      </li>
+      <li>
+        <div class="feature-box">
+          <div class="icon-support"></div>
+          <div class="content-blocks">call
+            +1 800 789 0000</div>
+        </div>
+      </li>
+      <li>
+        <div class="feature-box">
+          <div class="icon-money"></div>
+          <div class="content-blocks">Money Back Guarantee</div>
+        </div>
+      </li>
+      <li>
+        <div class="feature-box">
+          <div class="icon-return"></div>
+          <div class="content">30 days return</div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+{{>user-footer}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+function addToCart(proId){
+    $.ajax({
+        url:'/cart/'+proId,
+        method:'get',
+        success:(response)=>{
+           if(response.error){
+              swal("A product already exists in cart.", {
+                    icon: "error",
+                    })
+           }else if(response.msge){
+                  swal("Cart successfully updated.", {
+                    icon: "success",
+                    showConfirmButton: false,
+                    buttons: false,
+                    timer: 1500
+                    })
+            $('#cart-count').html(response.count)
+           }else{
+             window.location = "/login"
+           }
+        }
+    })
+}
+
+function addWishlist(proId){
+   $.ajax({
+        url:'/wishlistAdd/'+proId,
+        method:'get',
+        success:(response)=>{
+          if(response.errWishlist){
+            swal("Product already added.", {
+            icon: "warning",
+            })
+          }else if(response.msge){
+           swal("Added to your Wishlist", {
+              icon: "success",
+              showConfirmButton: false,
+              buttons: false,
+              timer: 1500
+            })
+          }else{
+            window.location = "/login"
+          }
+        }
+    })
+}
+
+function notAvailable(){
+    swal('Not availabale now....')
+}
+</script>

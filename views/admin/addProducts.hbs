@@ -1,100 +1,100 @@
-  <div class="container-scroller">
-    {{>admin-sidebar}}
-      <div class="main-panel">        
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">ADD A PRODUCTS</h4>
-                  <p style="color: red;">{{err}}</p>
-                  <p class="card-description">
-                   Let's add a new product.
-                  </p>
-                  <form class="forms-sample" action="/admin/addProduct" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label for="exampleInputName1">Product Name</label>
-                      <input type="text" class="form-control" id="exampleInputName1" name="product_name" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail3">Saling Price</label>
-                      <input type="text" class="form-control" id="exampleInputEmail3" name="product_price" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail3">Original Price</label>
-                      <input type="text" class="form-control" id="exampleInputEmail3" name="originalPrice" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword4">Stock</label>
-                      <input type="text" class="form-control" id="exampleInputPassword4" name="stock" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleSelectGender">Category</label>
-                        <select name="category" class="form-control" id="exampleSelectGender" required>
-                          {{#each subcategory}}
-                          <option value="{{this.subcategory}}">{{this.subcategory}}</option>
-                          {{/each}}
-                        </select>
-                      </div>
-                    <div class="form-group">
-                      <label>File upload</label>
-                      <div class="input-group col-xs-12">
-                        <input name="product_img" type="file" class="form-control" accept="image/*" required>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label>Thumbnail Images</label>
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img1" type="file" class="form-control" accept="image/*" required>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img2" type="file" class="form-control" accept="image/*" required>
-                      </div>
-                    </div>
-                    <div class="col">
-                    <div class="form-group">
-                      <div class="input-group col-xs-12">
-                        <input name="thumb_img3" type="file" class="form-control" accept="image/*" required>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Description</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="description" required>
-                    </div>
-                     <div class="form-group">
-                      <label for="exampleSelectGender">Brand</label>
-                        <select name="brand" class="form-control" id="exampleSelectGender" required>
-                          {{#each brand}}
-                          <option value="{{this.brand}}">{{this.brand}}</option>
-                          {{/each}}
-                        </select>
-                      </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Shipping Cost</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="shipping_cost" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">Discount Price</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" name="discount" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
+<div class="container-scroller">
+  {{>admin-sidebar}}
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">ADD A PRODUCTS</h4>
+              <p style="color: red;">{{err}}</p>
+              <p class="card-description">
+                Let's add a new product.
+              </p>
+              <form class="forms-sample" action="/admin/addProduct" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="exampleInputName1">Product Name</label>
+                  <input type="text" class="form-control" id="exampleInputName1" name="product_name" required>
                 </div>
-              </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail3">Saling Price</label>
+                  <input type="text" class="form-control" id="exampleInputEmail3" name="product_price" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail3">Original Price</label>
+                  <input type="text" class="form-control" id="exampleInputEmail3" name="originalPrice" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword4">Stock</label>
+                  <input type="text" class="form-control" id="exampleInputPassword4" name="stock" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleSelectGender">Category</label>
+                  <select name="category" class="form-control" id="exampleSelectGender" required>
+                    {{#each subcategory}}
+                    <option value="{{this.subcategory}}">{{this.subcategory}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>File upload</label>
+                  <div class="input-group col-xs-12">
+                    <input name="product_img" type="file" class="form-control" accept="image/*" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Thumbnail Images</label>
+                  <div class="input-group col-xs-12">
+                    <input name="thumb_img1" type="file" class="form-control" accept="image/*" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group col-xs-12">
+                    <input name="thumb_img2" type="file" class="form-control" accept="image/*" required>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <div class="input-group col-xs-12">
+                      <input name="thumb_img3" type="file" class="form-control" accept="image/*" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Description</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="description" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleSelectGender">Brand</label>
+                    <select name="brand" class="form-control" id="exampleSelectGender" required>
+                      {{#each brand}}
+                      <option value="{{this.brand}}">{{this.brand}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Shipping Cost</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="shipping_cost" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity1">Discount Price</label>
+                    <input type="text" class="form-control" id="exampleInputCity1" name="discount" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary me-2">Submit</button>
+                  <button class="btn btn-light">Cancel</button>
+              </form>
             </div>
           </div>
         </div>
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank"> Shopping Website</a></span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
-          </div>
-        </footer>
       </div>
     </div>
+    <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank">
+            Shopping Website</a></span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+          reserved.</span>
+      </div>
+    </footer>
   </div>
-
-  
+</div>
+</div>

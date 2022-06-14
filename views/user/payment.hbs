@@ -176,11 +176,20 @@
        selected=div[i].innerText
      } 
    }
+
    if(selected==null){
      swal({
        title:"Please select payment method",
        })
-   }else{
+   }else if(selected=="Paypal"){
+
+    swal('Not availabale now....')
+
+   }else if(selected=="Invoice"){
+
+    swal('Not availabale now....')
+
+   }else if(selected=="Razorpay" || selected=="Cash on Delivery"){
       $.ajax({
         url:'/placeOrder',
         data:{
@@ -195,7 +204,13 @@
             razorpayPayment(response.order,response.user)
           }
        }
+
       })
+   }else{
+       swal({
+       title:"Something went wrong try again",
+       icon: 'error',
+       })
    }
  }
 
@@ -226,9 +241,12 @@
 var rzp1 = new Razorpay(options);
 
 rzp1.on('payment.failed', function (response){
+  paymentFailed(order)
    swal({
        title:response.error.description,
        icon: 'error',
+       }).then(()=>{
+        location.href="/myorder"
        })
 });
 
@@ -260,5 +278,14 @@ rzp1.open();
        }
      }
    })
+ }
+ function paymentFailed(order){
+    $.ajax({
+     url:'/paymentFailed',
+     data:{
+       orderDetails:order
+     },
+     method:'post',
+    })
  }
 </script>

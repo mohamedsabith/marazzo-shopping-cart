@@ -1,4 +1,4 @@
-<header class="header-style-1"> 
+<header class="header-style-1">
   <div class="top-bar animate-dropdown">
     <div class="container">
       <div class="header-top-inner">
@@ -8,7 +8,7 @@
             <li class="header_cart hidden-xs"><a href="/cart"><span>My Cart</span></a></li>
             {{#if token}}
             <li class="myaccount"><a href="/profile"><span>My Account</span></a></li>
-            <li class="check"><a href="/profile" style = "text-transform:capitalize;"><span>{{user}}</span></a></li>
+            <li class="check"><a href="/profile" style="text-transform:capitalize;"><span>{{user}}</span></a></li>
             <li class="check"><a href="/logout" style="text-transform: uppercase"><span>Logout</span></a></li>
             {{else}}
             <li class="check"><a href="/signup"><span>Signup</span></a></li>
@@ -16,17 +16,19 @@
             {{/if}}
           </ul>
         </div>
-   
+
         <div class="cnt-block">
           <ul class="list-unstyled list-inline">
-            <li class="dropdown dropdown-small"> <a class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">USD </span><b class="caret"></b></a>
+            <li class="dropdown dropdown-small"> <a class="dropdown-toggle" data-hover="dropdown"
+                data-toggle="dropdown"><span class="value">USD </span><b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a>USD</a></li>
                 <li><a>INR</a></li>
                 <li><a>GBP</a></li>
               </ul>
             </li>
-            <li class="dropdown dropdown-small lang"> <a class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">English </span><b class="caret"></b></a>
+            <li class="dropdown dropdown-small lang"> <a class="dropdown-toggle" data-hover="dropdown"
+                data-toggle="dropdown"><span class="value">English </span><b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a>English</a></li>
                 <li><a>French</a></li>
@@ -46,19 +48,20 @@
   <div class="main-header">
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-3 logo-holder"> 
-      
+        <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
+
           <div class="logo"> <a href="/"> <img src="/images/logo.png" alt="logo"> </a> </div>
-          </div>
-        
-        <div class="col-lg-7 col-md-6 col-sm-8 col-xs-12 top-search-holder"> 
-  
+        </div>
+
+        <div class="col-lg-7 col-md-6 col-sm-8 col-xs-12 top-search-holder">
+
           <div class="search-area">
-            <form>
+            <form action="/search" method="get" id="search">
               <div class="control-group">
                 <ul class="categories-filter animate-dropdown">
-                  <li class="dropdown"> <a class="dropdown-toggle"  data-toggle="dropdown">Categories <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu" >
+                  <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown">Categories <b
+                        class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
                       <li class="menu-header">Computer</li>
                       <li role="presentation"><a role="menuitem" tabindex="-1">- Clothing</a></li>
                       <li role="presentation"><a role="menuitem" tabindex="-1">- Electronics</a></li>
@@ -67,35 +70,43 @@
                     </ul>
                   </li>
                 </ul>
-                <input class="search-field" placeholder="Search here..." />
-                <a class="search-button" ></a> </div>
+                <input class="search-field" placeholder="Search here..." name="search" />
+                <a class="search-button" onclick="document.getElementById('search').submit();"></a>
+              </div>
             </form>
           </div>
-       </div>
-        
-        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 animate-dropdown top-cart-row">        
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 animate-dropdown top-cart-row">
           <div class="dropdown dropdown-cart"> <a href="/cart" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
               {{#if token}}
               <div class="items-cart-inner">
-              <div class="basket" onclick="window.location.href='/cart' ">
-              <div class="basket-item-count" onclick="window.location.href='/cart' "><span class="count" id="cart-count">{{countCart}}</span></div>
-              <div class="total-price-basket"  onclick="window.location.href='/cart' "> 
-              {{#if totalAmt.Total.total}}
-              <span class="lbl">Shopping Cart</span>
-              <span class="value">$ {{totalAmt.Total.total}}</span> 
-               {{/if}}
+                <div class="basket" onclick="window.location.href='/cart' ">
+                  <div class="basket-item-count" onclick="window.location.href='/cart' "><span class="count"
+                      id="cart-count">{{countCart}}</span></div>
+                  <div class="total-price-basket" onclick="window.location.href='/cart' ">
+                    {{#if totalAmt.Total.total}}
+                    <span class="lbl">Shopping Cart</span>
+                    <span class="value">$ {{totalAmt.Total.total}}</span>
+                    {{/if}}
+                  </div>
+                </div>
               </div>
-              </div>
-            </div>
-            {{/if}}
+              {{/if}}
             </a>
           </div>
-      </div>
+        </div>
 
       </div>
-      
+
     </div>
-    
+
   </div>
 
 </header>
+
+<script>
+  $("#search").submit(function (e) {
+    e.preventDefault();
+  });
+</script>

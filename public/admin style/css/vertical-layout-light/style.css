@@ -31230,8 +31230,8 @@ div.tagsinput span.tag a {
 
 #settings-trigger {
   position: fixed;
-  bottom: 40px;
-  right: 30px;
+  bottom: 25px;
+  right: 125px;
   height: 45px;
   width: 45px;
   background: #1F3BB3;

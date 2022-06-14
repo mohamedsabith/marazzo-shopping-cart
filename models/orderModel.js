@@ -12,6 +12,7 @@ const orderSchema = new Mongoose.Schema({
       price: Number,
       brand: String,
       image: String,
+      description: String,
       quantity: Number,
       subtotal: Number,
       paid: {
@@ -31,18 +32,19 @@ const orderSchema = new Mongoose.Schema({
         type: String,
         required: true,
       },
-      active:{
-        type:Boolean,
-        default:false
+      active: {
+        type: Boolean,
+        default: true,
       },
-      cancel:{
-        type:Boolean,
-        default:false
+      cancel: {
+        type: Boolean,
+        default: false,
       },
-      cancelDate:{
-        type:String,
-        default:null
-      }
+      cancelDate: {
+        type: String,
+        default: null,
+      },
+      user: String,
     },
   ],
   total: {
@@ -60,12 +62,24 @@ const orderSchema = new Mongoose.Schema({
     type: Number,
     default: 0,
   },
+  subTotalAddedd: {
+    type: Number,
+    default: 0,
+  },
   couponDiscount: {
     type: Number,
     default: 0,
   },
+  deliverDate: {
+    type: String,
+    default: null,
+  },
   count: {
     type: Number,
+  },
+  created: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

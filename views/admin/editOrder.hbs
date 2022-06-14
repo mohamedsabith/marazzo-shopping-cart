@@ -1,0 +1,47 @@
+<div class="container-scroller">
+  {{>admin-sidebar}}
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Edit Order</h4>
+              <p class="card-description">
+                Let's edit a order.
+              </p>
+              <form class="forms-sample" action="/admin/orderEdit/{{orderId}}/{{user}}" method="post">
+                <div class="form-group">
+                  <label for="exampleInputUsername1">Paid or not</label>
+                  <select name="paid" class="form-control" id="exampleSelectGender" required>
+                    <option value="Paided">Paided</option>
+                    <option value="Not paided">Not paided</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleSelectGender">Status</label>
+                  <select name="status" class="form-control" id="exampleSelectGender" required>
+                    <option value="Order placed">Order Placed</option>
+                    <option value="Picked by courier">Picked by courier</option>
+                    <option value="On the way">On the way</option>
+                    <option value="Ready for pickup">Ready for pickup</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank">
+            Shopping Website</a></span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+          reserved.</span>
+      </div>
+    </footer>
+  </div>
+</div>
+</div>

@@ -1,62 +1,65 @@
- <div class="container-scroller"> 
-      {{>admin-sidebar}}
-      <div class="main-panel">        
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Add a Category</h4>
-                  <p style="color: red;">{{err}}</p>
-                  <p class="card-description">
-                    Let's add a new category.
-                  </p>
-                  <form class="forms-sample" action="/admin/category" method="post">
-                    <div class="form-group">
-                      <label for="exampleInputUsername1">Category</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Category" name="category" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                  </form>
+<div class="container-scroller">
+  {{>admin-sidebar}}
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Add a Category</h4>
+              <p style="color: red;">{{err}}</p>
+              <p class="card-description">
+                Let's add a new category.
+              </p>
+              <form class="forms-sample" action="/admin/category" method="post">
+                <div class="form-group">
+                  <label for="exampleInputUsername1">Category</label>
+                  <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Category"
+                    name="category" required>
                 </div>
-              </div>
-            </div>
-
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Add a Sub Category</h4>
-                  <p style="color: red;">{{error}}</p>
-                  <p class="card-description">
-                    Let's add a new sub category.
-                  </p>
-                   <form class="forms-sample" action="/admin/subcategory" method="post">
-                    <div class="form-group">
-                      <label for="exampleInputUsername1">Sub Category</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Sub Category" name="subcategory">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleSelectGender">Category</label>
-                        <select name="category" class="form-control" id="exampleSelectGender" required>
-                         {{#each result}}
-                          <option value="{{this.name}}">{{this.name}}</option>
-                          {{/each}}
-                        </select>
-                      </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                  </form>
-                </div>
-              </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+              </form>
             </div>
           </div>
         </div>
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank"> Shopping Website</a></span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Add a Sub Category</h4>
+              <p style="color: red;">{{error}}</p>
+              <p class="card-description">
+                Let's add a new sub category.
+              </p>
+              <form class="forms-sample" action="/admin/subcategory" method="post">
+                <div class="form-group">
+                  <label for="exampleInputUsername1">Sub Category</label>
+                  <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Sub Category"
+                    name="subcategory">
+                </div>
+                <div class="form-group">
+                  <label for="exampleSelectGender">Category</label>
+                  <select name="category" class="form-control" id="exampleSelectGender" required>
+                    {{#each result}}
+                    <option value="{{this.name}}">{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+              </form>
+            </div>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
+    <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Marazzo <a href="/" target="_blank">
+            Shopping Website</a></span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights
+          reserved.</span>
+      </div>
+    </footer>
   </div>
-
+</div>
+</div>

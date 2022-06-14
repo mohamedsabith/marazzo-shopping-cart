@@ -1,12 +1,12 @@
 {{>user-header token=token}}
 {{>user-navbar countCart=countCart totalAmt=totalAmt}}
+
 <div class="breadcrumb">
     <div class="container">
         <div class="breadcrumb-inner">
             <ul class="list-inline list-unstyled">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">{{product.brand.brand}}</a></li>
-                <li class='active'>{{product.productName}}</li>
+                <li class='active'>Products</li>
             </ul>
         </div><!-- /.breadcrumb-inner -->
     </div><!-- /.container -->
@@ -73,8 +73,7 @@
                                             <div class="add-cart-button btn-group">
                                                 <button class="btn btn-primary icon" data-toggle="dropdown"
                                                     type="button"> <i class="fa fa-shopping-cart"></i> </button>
-                                                <button class="btn btn-primary cart-btn" type="button">Add to
-                                                    cart</button>
+                                                <button class="btn btn-primary cart-btn" type="button" disabled>Add to cart</button>
                                             </div>
                                         </div>
                                         <!-- /.action -->
@@ -129,8 +128,7 @@
                                             <div class="add-cart-button btn-group">
                                                 <button class="btn btn-primary icon" data-toggle="dropdown"
                                                     type="button"> <i class="fa fa-shopping-cart"></i> </button>
-                                                <button class="btn btn-primary cart-btn" type="button">Add to
-                                                    cart</button>
+                                                <button class="btn btn-primary cart-btn" type="button" disabled>Add to cart</button>
                                             </div>
                                         </div>
                                         <!-- /.action -->
@@ -186,8 +184,7 @@
                                             <div class="add-cart-button btn-group">
                                                 <button class="btn btn-primary icon" data-toggle="dropdown"
                                                     type="button"> <i class="fa fa-shopping-cart"></i> </button>
-                                                <button class="btn btn-primary cart-btn" type="button">Add to
-                                                    cart</button>
+                                                <button class="btn btn-primary cart-btn" type="button" disabled>Add to cart</button>
                                             </div>
                                         </div>
                                         <!-- /.action -->
@@ -372,22 +369,22 @@
                                         <div class="col-sm-6 col-xs-6">
                                             <div class="price-box">
                                                 <span class="price">${{product.price}}</span>
-                                                <span class="price-strike">${{product.discountPrice}}</span>
+                                                <span class="price-strike">${{product.originalPrice}}</span>
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6 col-xs-6">
                                             <div class="favorite-button m-t-5">
                                                 <a class="btn btn-primary" data-toggle="tooltip" data-placement="right"
-                                                    title="Wishlist" href="#">
+                                                    title="Wishlist" onclick="addWishlist('{{product._id}}')">
                                                     <i class="fa fa-heart"></i>
                                                 </a>
                                                 <a class="btn btn-primary" data-toggle="tooltip" data-placement="right"
-                                                    title="Add to Compare" href="#">
+                                                    title="Add to Compare" onclick="notAvailable()">
                                                     <i class="fa fa-signal"></i>
                                                 </a>
                                                 <a class="btn btn-primary" data-toggle="tooltip" data-placement="right"
-                                                    title="E-mail" href="#">
+                                                    title="E-mail" onclick="notAvailable()">
                                                     <i class="fa fa-envelope"></i>
                                                 </a>
                                             </div>
@@ -541,8 +538,7 @@
                                                         </div><!-- /.row -->
 
                                                         <div class="action text-right">
-                                                            <button class="btn btn-primary btn-upper">SUBMIT
-                                                                REVIEW</button>
+                                                            <button class="btn btn-primary btn-upper" disabled>SUBMIT REVIEW</button>
                                                         </div><!-- /.action -->
 
                                                     </form><!-- /.cnt-form -->
@@ -568,8 +564,7 @@
 
                                                 </div>
 
-                                                <button class="btn btn-upper btn-primary" type="submit">ADD
-                                                    TAGS</button>
+                                                <button class="btn btn-upper btn-primary" type="submit" disabled>ADD TAGS</button>
                                             </div><!-- /.form-container -->
                                         </form><!-- /.form-cnt -->
 
@@ -624,7 +619,9 @@
         </ul>
     </div>
 </div>
+
 {{>user-footer}}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script type="text/javascript">
@@ -638,12 +635,42 @@ function addToCart(proId){
                     icon: "error",
                     })
            }else{
-           swal("Cart successfully updated.", {
+            swal("Cart successfully updated.", {
                     icon: "success",
+                    showConfirmButton: false,
+                    buttons: false,
+                    timer: 1500
                     })
             $('#cart-count').html(response.count)
            }
         }
     })
+}
+
+function addWishlist(proId){
+   $.ajax({
+        url:'/wishlistAdd/'+proId,
+        method:'get',
+        success:(response)=>{
+          if(response.errWishlist){
+            swal("Product already added.", {
+            icon: "warning",
+            })
+          }else if(response.msge){
+           swal("Added to your Wishlist", {
+              icon: "success",
+              showConfirmButton: false,
+              buttons: false,
+              timer: 1500
+            })
+          }else{
+            window.location = "/login"
+          }
+        }
+    })
+}
+
+function notAvailable(){
+    swal('Not availabale now....')
 }
 </script>

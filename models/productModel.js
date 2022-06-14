@@ -22,7 +22,7 @@ const productSchema=new Mongoose.Schema({
         type:String,
         required:true,
         min:20,
-        max:200
+        max:500
     },
     SubCategory: {
         type: Mongoose.Schema.Types.ObjectId,
@@ -55,7 +55,13 @@ const productSchema=new Mongoose.Schema({
         type: String,
         required:true
     },
+    stockLess:{
+        type:Boolean,
+        default:false
+    }
 })
+
+productSchema.index({productName:"text"}) 
 
 const ProductModel = Mongoose.model("Products", productSchema);
 
