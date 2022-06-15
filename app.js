@@ -9,6 +9,7 @@ const session = require('express-session')
 const dotenv = require('dotenv')
 
 dotenv.config()
+
 var app = express();
 
 var usersRouter = require('./routes/users');
@@ -30,7 +31,7 @@ app.use(session({
   resave:true,
   saveUninitialized: true,
   secret: 'sessionsecretkey',
-  cookie:{maxAge:6000000}
+  cookie:{maxAge:60000}
 }))
 
 app.use('/', usersRouter);
