@@ -18,7 +18,7 @@
 }
 .form-v4-content  {
 	background: #fff;
-	width: 850px;
+	width: 935px;
 	border-radius: 10px;
 	-o-border-radius: 10px;
 	-ms-border-radius: 10px;
@@ -276,7 +276,7 @@
 /* Responsive */
 @media screen and (max-width: 991px) {
 	.form-v4-content {
-		margin: 10px 20px;
+		margin: 38px 20px;
 		flex-direction:  column;
 		-o-flex-direction:  column;
 		-ms-flex-direction:  column;

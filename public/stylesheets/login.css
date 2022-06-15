@@ -454,10 +454,10 @@
     margin-left: auto; }
     @media (min-width: 576px) {
       .container {
-        max-width: 540px; } }
+        max-width: 940px; } }
     @media (min-width: 768px) {
       .container {
-        max-width: 720px; } }
+        max-width: 1020px; } }
     @media (min-width: 992px) {
       .container {
         max-width: 960px; } }
@@ -8160,9 +8160,23 @@
   
   .bg-primary {
     background: #f35588 !important; }
+
+    @media only screen and (min-width: 200px) and (max-width: 767px)  {
+        .ftco-section {
+        padding: 15rem 0; } 
+     
+      }
+
+      @media only screen and (min-width: 768px) and (max-width: 1024px)  {
+        .ftco-section {
+          padding: 20rem 0; } 
+      }
+
+      @media only screen and (min-width: 1025px) and (max-width: 1750px)  {
+        .ftco-section {
+          padding: 6rem 0; } 
+      }
   
-  .ftco-section {
-    padding: 4em 0; }
   
   .ftco-no-pt {
     padding-top: 0; }
