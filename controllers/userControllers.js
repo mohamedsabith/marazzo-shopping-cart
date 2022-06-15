@@ -234,6 +234,7 @@ const otpVerify = (data,userid) =>{
 
 //forgetpassword
 const forgetPassword = (data) =>{
+
   return new Promise(async(resolve,reject)=>{
      
     const Validations=await forgetpasswordValidation(data)
@@ -269,7 +270,7 @@ const forgetPassword = (data) =>{
         `
       };
 
-      await userModel.updateOne({resetLink:token})
+      await userModel.findOneAndUpdate({email:data.email},{$set:{resetLink:token}})
 
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -285,8 +286,6 @@ const forgetPassword = (data) =>{
 
   })
 }
-
-
 
 //resetpassword
 const resetpassword = (data,token) =>{
