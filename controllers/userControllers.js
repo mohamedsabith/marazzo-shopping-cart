@@ -1107,7 +1107,7 @@ pdf.create(document, options).then(res => {
     console.log(error);
 });
 
-const filepath = 'http://localhost:5000/docs/' + filename;
+const filepath = 'https://marazzo.store/docs/' + filename;
  
 resolve(filepath)
 
