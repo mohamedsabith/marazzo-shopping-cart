@@ -1,73 +1,83 @@
-<head>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="/stylesheets/login.css" />
-</head>
-<section class="ftco-section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-12 col-lg-10">
-        <div class="wrap d-md-flex">
-          <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
-            <div class="text w-100">
-              <h2>Welcome to MARAZZO</h2>
-              <p>Login with your mobile number/gmail to get started</p>
-              <p>Don't have an account?</p>
-              <a href="/signup" class="btn btn-white btn-outline-white">Sign Up</a>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/stylesheets/login styles/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="/stylesheets/login styles/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/stylesheets/login styles/css/bootstrap.min.css">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="/stylesheets/login styles/css/style.css">
+
+  </head>
+  <body>
+  
+
+  
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="/stylesheets/login styles/images/undraw_remotely_2j6y.svg" alt="Image" class="img-fluid">
+        </div>
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="mb-4">
+              <h3>Sign In</h3>
+              <p class="mb-4">Login with your mobile number/gmail to get started.</p>
+              <p style="color: red;">{{loginErr}}</p>
             </div>
-          </div>
-          <div class="login-wrap p-4 p-lg-5">
-            <p style="color: red;">{{loginErr}}</p>
-            <div class="d-flex">
-              <div class="w-100">
-                <h3 class="mb-4">Sign In</h3>
+            <form action="/login" method="post">
+              <div class="form-group first">
+                <input type="text" class="form-control" id="username" name="email" style="font-size: 16px;" placeholder="Email">
+
+              </div>
+              <div class="form-group first">
+                <input type="text" class="form-control" id="password" name="phone_number" style="font-size: 16px;" placeholder="Phone Number">
+                
               </div>
 
-              <div class="w-100">
-
-                <p class="social-media d-flex justify-content-end">
-                  <a href="/login" class="social-icon d-flex align-items-center justify-content-center"><span
-                      class="fa fa-google"></span></a>
-                  <a href="/login" class="social-icon d-flex align-items-center justify-content-center"><span
-                      class="fa fa-phone"></span></a>
-                </p>
+               <div class="form-group last mb-4">
+                <input type="text" class="form-control" id="password" name="password" style="font-size: 16px;" placeholder="Password">
               </div>
-            </div>
-
-            <form action="/login" class="signin-form" method="post" id="loginform">
-
-              <div class="form-group mb-3">
-                <label class="label" for="name">Email</label>
-                <input type="text" class="form-control" name="email" placeholder="Email" id="email" required />
+              
+              <div class="d-flex mb-5 align-items-center">
+                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                  <input type="checkbox" checked="checked"/>
+                  <div class="control__indicator"></div>
+                </label>
+                <span class="ml-auto"><a href="/forgotpassword" class="forgot-pass">Forgot Password</a></span> 
               </div>
 
-              <div class="form-group mb-3">
-                <label class="label" for="name">Phone Number</label>
-                <input type="text" class="form-control" name="phone_number" placeholder="Phone number" id="phone_number" required />
-              </div>
-              <div class="form-group mb-3">
-                <label class="label" for="password">Password</label>
-                <input type="password" class="form-control" placeholder="Password" name="password" id="password" required/>
-              </div>
-              <div class="form-group">
-                <button type="submit" class="form-control btn btn-primary submit px-3">SIGN IN</button>
-              </div>
+              <input type="submit" value="Log In" class="btn btn-block btn-primary">
 
-              <div class="form-group d-md-flex">
-                <div class="w-50 text-left">
-                  <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
-                    <input type="checkbox" checked />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
-                <div class="w-50 text-md-right">
-                  <a href="/forgotpassword">Forgot Password</a>
-                </div>
+              <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
+              
+              <div class="social-login">
+                <a  class="facebook">
+                  <span class="icon-facebook mr-3"></span> 
+                </a>
+                <a  class="twitter">
+                  <span class="icon-twitter mr-3"></span> 
+                </a>
+                <a  class="google">
+                  <span class="icon-google mr-3"></span> 
+                </a>
               </div>
             </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+  </body>
+</html>
