@@ -247,7 +247,8 @@ const forgetPassword = (data) =>{
      if(!user){
       reject({status:false,forgotErr:"The email you entered doesn't belong to an account. Please check your email and try again."})
      }else{
-      const token = await jwt.sign({id:user._id,name:user.username,email:user.email,phone_number:user.phone_number,status:'ok'},process.env.RESET_PASSWORD_KEY,{expiresIn:'1m'});
+
+      const token = await jwt.sign({id:user._id,name:user.username,email:user.email,phone_number:user.phone_number,status:'ok'},process.env.RESET_PASSWORD_KEY,{expiresIn:'4m'});
      
       var transporter = await nodemailer.createTransport({
         service: 'gmail',
