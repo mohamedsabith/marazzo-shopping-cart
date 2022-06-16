@@ -224,10 +224,7 @@ router.post('/addCoupon',(req,res)=>{
 
 router.get('/order',async(req,res)=>{  
   const order = await getAllOrders()
-  if(order){
-    res.render('admin/orderView',{order})
-  }
-  res.render('admin/orderView')
+  res.render('admin/orderView',{order})
 })
 
 router.get('/editOrder/:id/:user',async(req,res)=>{
