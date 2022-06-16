@@ -992,7 +992,8 @@ const getDirection = (Order) =>{
    
   })
 }
-
+ 
+//user order
 const  getOrder = (orderId) =>{
   return new Promise(async(resolve,reject)=>{
     const order = await orderModel.findById({_id:orderId}).lean()
