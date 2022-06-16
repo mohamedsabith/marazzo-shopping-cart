@@ -412,7 +412,7 @@ router.post('/placeOrder',(req,res)=>{
       req.session.orderId=response.data._id
       if(req.body.payment=="Cash on Delivery"){
         generatePdf(response,decode.email,result.date).then((Path)=>{
-          invoiceSend(Path.file).then(async()=>{
+          invoiceSend(Path.file,decode.email).then(async()=>{
             req.session.InvoiceUrl=Path.path
             await cartModel.findOneAndDelete({userId:decode.email})
             res.status(200).json({status:true,method:"COD"})

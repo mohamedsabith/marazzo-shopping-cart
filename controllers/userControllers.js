@@ -1116,7 +1116,7 @@ const generatePdf = (order, User, date) => {
   })
 }
 
-const invoiceSend = (file) => {
+const invoiceSend = (file,data) => {
   return new Promise((resolve, reject) => {
 
     //otp sending with nodemailer
@@ -1130,7 +1130,7 @@ const invoiceSend = (file) => {
 
     var mailOptions = {
       from: 'mohamedsabithmp@gmail.com',
-      to: "fazfavas75@gmail.com",
+      to:data,
       subject: 'Order Invoice.',
       html: `<h3>Please click the link below to reset you password</h3>`,
       attachments: [
