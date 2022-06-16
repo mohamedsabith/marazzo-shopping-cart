@@ -6,7 +6,7 @@ require("dotenv").config();
 const { verifyUser, verifyToken,verifySession } = require("../middlewares/verifyUser");
 const upload = require('../middlewares/userMulter')
 const cartModel = require('../models/cartModel')
-const {userSignup, userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,couponDetails,subTotal,checkCouponCode,getWishlist,saveWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,getAddress,billingAddress,conformAddress,shippingAddress,AddNewAddress,AppleBrandProducts,mensFashion,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack,paymentFailed,generatePdf,productSerach} = require("../controllers/userControllers");
+const {userSignup, userLogin,otpSend,otpverification,forgetPassword,resetpassword,userDetails,otpVerify,listAllCategory,listAllSubcategory,newProducts,userCart,productView,cartCount,cartItems,userDetailsUpdate,changeCartQuantity,cartProductDelete,totalAmount,couponDetails,subTotal,checkCouponCode,getWishlist,saveWishlist,wishlistProductDelete,shippingCost,categoryProducts,addressCheck,pincodeDetails,getAddress,billingAddress,conformAddress,shippingAddress,AddNewAddress,AppleBrandProducts,mensFashion,newOrder,generateRazorpay,verifyPayment,updatePaymentStatus,getDirection,getOrder,userOrder,orderCancel,orderTrack,paymentFailed,generatePdf,productSerach,invoiceSend} = require("../controllers/userControllers");
 
 //home router
 router.get("/",async(req, res)=> {
@@ -411,10 +411,12 @@ router.post('/placeOrder',(req,res)=>{
     getDirection(response).then((result)=>{
       req.session.orderId=response.data._id
       if(req.body.payment=="Cash on Delivery"){
-        generatePdf(response,decode.email,result.date).then(async(path)=>{
-          req.session.InvoiceUrl=path
-          await cartModel.findOneAndDelete({userId:decode.email})
-          res.status(200).json({status:true,method:"COD"})
+        generatePdf(response,decode.email,result.date).then((Path)=>{
+          invoiceSend(Path.file).then(async()=>{
+            req.session.InvoiceUrl=Path.path
+            await cartModel.findOneAndDelete({userId:decode.email})
+            res.status(200).json({status:true,method:"COD"})
+          })
         })
      }else if(req.body.payment=="Razorpay"){
          generateRazorpay(response).then((result)=>{
