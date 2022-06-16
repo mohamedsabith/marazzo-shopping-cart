@@ -225,7 +225,7 @@ router.post('/addCoupon',(req,res)=>{
 router.get('/order',async(req,res)=>{  
   const order = await getAllOrders()
   if(order){
-    res.render('admin/orderView',{Order:order.product})
+    res.render('admin/orderView',{order})
   }
   res.render('admin/orderView')
 })

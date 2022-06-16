@@ -399,10 +399,11 @@ const listCoupon = () =>{
 const getAllOrders = () =>{
     return new Promise(async(resolve,reject)=>{
      const order = await orderModel.find({}).lean()
-      order.forEach((res)=>{
-        resolve({product:res.product})
-      })
-       resolve()
+      if(order){
+        resolve(order)
+      }else{
+        resolve()
+      }
     })
 }
 
