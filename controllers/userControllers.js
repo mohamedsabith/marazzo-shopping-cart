@@ -18,18 +18,16 @@ const { userSignupvalidation, userLoginValidation, forgetpasswordValidation, res
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer');
 const { phone } = require('phone');
-const email_verifier = require('email-verifier-node');
 const fast2sms = require('fast-two-sms');
 const pincodeDirectory = require('india-pincode-lookup');
 const moment = require('moment');
 const Razorpay = require('razorpay');
 const crypto = require('crypto')
 const options = require('../util/option')
-const { resolve } = require('path')
 require('dotenv').config()
 
 //razorpay instance
-var instance = new Razorpay({
+const instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY,
   key_secret: process.env.RAZORPAY_SECRET,
 });
@@ -41,34 +39,30 @@ const userSignup = (data) => {
 
     const Validations = await userSignupvalidation(data)
 
+    const {email,phone_number,username} = data
+
     if (Validations.error) {
-      return reject({ status: false, errorSignup: Validations.error.details[0].message.replace(/"/g, '') });
+      reject({ status: false, errorSignup: Validations.error.details[0].message.replace(/"/g, '') });
     }
 
     const randomNumber = await Math.floor(100000 + Math.random() * 900000);
 
-    const user = await userModel.findOne({ email: data.email })
-
-    const number = await userModel.findOne({ phone_number: data.phone_number })
-
-    const emailVerifier = await email_verifier.verify_email(data.email)
-
-    console.log(emailVerifier);
+    // checking user already exist
+    const user = await userModel.findOne({
+      $or: [{ email }, { phone_number }],
+    });
 
     const numberVerify = await phone('+91' + data.phone_number)
 
     if (user) {
-      reject({ status: false, errorSignup: 'Another account is using this email' })
-    }
-    else if (number) {
-      reject({ status: false, errorSignup: 'Another account is using this phone number' })
-    } else if (numberVerify.isValid == false) {
+      reject({ status: false, errorSignup: 'Another account is using this email or phone number'})
+    }else if (numberVerify.isValid == false) {
       reject({ status: false, errorSignup: 'This number is not valid. Please enter valid number.' })
     } else {
 
 
       //otp sending with nodemailer
-      var transporter = await nodemailer.createTransport({
+      const transporter = await nodemailer.createTransport({
         service: 'gmail',
         auth: {
           user: process.env.GOOGLE_APP_EMAIL,
@@ -77,11 +71,11 @@ const userSignup = (data) => {
       });
 
 
-      var mailConfig = {
+      const mailConfig = {
         from: 'mohamedsabithmp@gmail.com',
-        to: data.email,
+        to: email,
         subject: 'Verify your email address | Marazzo',
-        html: `<p>Hi, ${data.username}</p>
+        html: `<p>Hi, ${username}</p>
                 <p>Welcome to Marazzo!</p>
                 <p>Enter the below code to verify your code</p>
                 <p>Your Marazzo verification code is ${randomNumber}</p>`,
@@ -96,7 +90,7 @@ const userSignup = (data) => {
       });
 
 
-      return resolve({ status: 'ok', msg: 'Otp sent successfuly', randomNumber, data })
+      resolve({ status: 'ok', msg: 'Otp sent successfuly', randomNumber, data })
     }
 
   })
@@ -109,13 +103,13 @@ const otpverification = (data, user, randomNumber) => {
 
     const otpcode = await data.otp1 + data.otp2 + data.otp3 + data.otp4 + data.otp5 + data.otp6
 
-    if (randomNumber == otpcode) {
+    if (randomNumber === otpcode) {
 
       //password hashing
       data.password = await bcrypt.hash(user.password, 12)
 
 
-      var todayDateFormat = moment(new Date()).format("DD/MM/YYYY")
+      const todayDateFormat = moment(new Date()).format("DD/MM/YYYY")
 
       // saving to DB
       const newUser = new userModel({
@@ -131,13 +125,13 @@ const otpverification = (data, user, randomNumber) => {
         if (err) {
 
           console.log(err)
-          return reject({ status: false, errorSignup: 'Something went wrong try again' })
+          reject({ status: false, errorSignup: 'Something went wrong try again' })
 
         }
 
-        const token = await jwt.sign({ id: res._id, name: res.username, email: res.email, phone_number: res.phone_number, status: 'ok' }, process.env.JWT_TOKEN, { expiresIn: '1d' });
+        const token = jwt.sign({ id: res._id, name: res.username, email: res.email, phone_number: res.phone_number, status: 'ok' }, process.env.JWT_TOKEN, { expiresIn: '1d' });
 
-        return resolve({ status: 'ok', msg: 'Account created successfuly', token })
+        resolve({ status: 'ok', msg: 'Account created successfuly', token })
 
       })
 
@@ -159,29 +153,32 @@ const userLogin = (data) => {
     const Validations = await userLoginValidation(data)
 
     if (Validations.error) {
-      return reject({ status: false, errorLogin: Validations.error.details[0].message.replace(/"/g, '') });
+      reject({ status: false, errorLogin: Validations.error.details[0].message.replace(/"/g, '') });
     }
 
     const user = await userModel.findOne({ email: data.email })
-    if (user) {
-      if (user.blocked == false) {
-        if (user.phone_number == data.phone_number) {
+
+   if(!user){
+    reject({ status: false, errorLogin: "User not found. Please check your mail." })
+   }
+
+   else if(user.blocked){
+    reject({ status: false, errorLogin: "This Account has been blocked by the Administrator" })
+   }
+
+
+        if (user.phone_number === data.phone_number) {
           await bcrypt.compare(data.password, user.password).then(async (status) => {
             if (status) {
               resolve({ status: true, msge: 'otp sending', user })
             } else {
-              return reject({ status: false, errorLogin: "Your password was incorrect. Please double-check your password." })
+              reject({ status: false, errorLogin: "Your password was incorrect. Please double-check your password." })
             }
           })
         } else {
-          return reject({ status: false, errorLogin: "This number doesn't match with email." })
+          reject({ status: false, errorLogin: "This number doesn't match with email." })
         }
-      } else {
-        return reject({ status: false, errorLogin: "This Account has been blocked by the Administrator" })
-      }
-    } else {
-      return reject({ status: false, errorLogin: "User not found. Please check your mail." })
-    }
+    
   })
 }
 
@@ -193,19 +190,19 @@ const otpSend = (result) => {
     //creating random numbers
     const randomNumber = Math.floor(100000 + Math.random() * 900000);
 
-    const otpset = await userModel.findByIdAndUpdate({ _id: result.user._id }, { $set: { otpcode: randomNumber } })
+    await userModel.findByIdAndUpdate({ _id: result.user._id }, { $set: { otpcode: randomNumber } })
 
     const fast2smsapi = process.env.FAST2SMSAPI;
 
-    var options = {
+    const options = {
       authorization: fast2smsapi,
       message: 'Your Marazzo verification code is ' + randomNumber,
       numbers: [result.user.phone_number]
     }
 
-    fast2sms.sendMessage(options).then((result) => {
+    fast2sms.sendMessage(options).then(() => {
       resolve({ status: true, msge: "Otp send successfully.", randomNumber })
-    }).catch((error) => {
+    }).catch(() => {
       reject({ status: false, errorLogin: "Something went wrong try again." })
     })
 
@@ -220,16 +217,16 @@ const otpVerify = (data, userid) => {
 
     const user = await userModel.findById({ _id: userid })
 
-    if (user) {
-      if (user.otpcode == otpcode) {
-        const token = await jwt.sign({ id: user._id, name: user.username, email: user.email, phone_number: user.phone_number, status: 'ok' }, process.env.JWT_TOKEN, { expiresIn: '1d' });
+    if(!user){
+      reject({ status: false, errOtp: "User not found" })
+    }
+
+      if (user.otpcode === otpcode) {
+        const token = jwt.sign({ id: user._id, name: user.username, email: user.email, phone_number: user.phone_number, status: 'ok' }, process.env.JWT_TOKEN, { expiresIn: '1d' });
         resolve({ status: true, msge: "Otp Matched.", token, user })
       } else {
         reject({ status: false, errOtp: "The OTP entered is invalid/incorrect. Please try again." })
       }
-    } else {
-      reject({ status: false, errOtp: "User not found" })
-    }
   })
 }
 
@@ -241,18 +238,19 @@ const forgetPassword = (data) => {
     const Validations = await forgetpasswordValidation(data)
 
     if (Validations.error) {
-      return reject({ status: false, forgotErr: Validations.error.details[0].message.replace(/"/g, '') });
+      reject({ status: false, forgotErr: Validations.error.details[0].message.replace(/"/g, '') });
     }
 
     const user = await userModel.findOne({ email: data.email })
 
     if (!user) {
       reject({ status: false, forgotErr: "The email you entered doesn't belong to an account. Please check your email and try again." })
-    } else {
+    }
+
 
       const token = await jwt.sign({ id: user._id, name: user.username, email: user.email, phone_number: user.phone_number, status: 'ok' }, process.env.RESET_PASSWORD_KEY, { expiresIn: '4m' });
 
-      var transporter = await nodemailer.createTransport({
+      const transporter = await nodemailer.createTransport({
         service: 'gmail',
         secure: true,
         auth: {
@@ -261,7 +259,7 @@ const forgetPassword = (data) => {
         }
       });
 
-      var mailOptions = {
+      const mailOptions = {
         from: 'mohamedsabithmp@gmail.com',
         to: data.email,
         subject: 'Reset Account Password Link',
@@ -282,8 +280,8 @@ const forgetPassword = (data) => {
 
       });
 
-      return resolve({ status: true, msge: "We sent an email to " + data.email + " with a link to get back into your account.", token })
-    }
+      resolve({ status: true, msge: "We sent an email to " + data.email + " with a link to get back into your account.", token })
+    
 
   })
 }
@@ -291,25 +289,27 @@ const forgetPassword = (data) => {
 //resetpassword
 const resetpassword = (data, token) => {
   return new Promise(async (resolve, reject) => {
-    if (token) {
+
+   if(!token){
+    reject({ status: false, errorReset: "Access denied" })
+   }
+
       jwt.verify(token, process.env.RESET_PASSWORD_KEY, async (error, decodedData) => {
         if (error) {
-          return reject({ status: false, errorReset: "invalid token" })
+           reject({ status: false, errorReset: "invalid token" })
         } else {
           const Validations = await resetpasswordValidation(data)
 
           if (Validations.error) {
-            return reject({ status: false, errorReset: Validations.error.details[0].message.replace(/"/g, '') });
+            reject({ status: false, errorReset: Validations.error.details[0].message.replace(/"/g, '') });
           }
 
           const hashedPassword = await bcrypt.hash(data.password, 12)
           await userModel.findOneAndUpdate({ resetLink: token }, { $set: { password: hashedPassword } })
-          return resolve({ status: true, msge: "Successfully updated" })
+          resolve({ status: true, msge: "Successfully updated" })
         }
       })
-    } else {
-      return reject({ status: false, errorReset: "Access denied" })
-    }
+  
   })
 }
 
@@ -367,10 +367,10 @@ const userCart = (proId, userData,) => {
       const proExist = cart.products.findIndex(product => product.productId == proId)
 
       if (proExist != -1) {
-        return resolve({ status: false, error: "Product already added to cart" })
+         resolve({ status: false, error: "Product already added to cart" })
       } else {
         await cartModel.findOneAndUpdate({ userId: userData }, { $push: { products: { productId: proId, quantity: 1, name: product.productName, price: product.price, brand: Brand.brand, shippingcost: product.shippingCost, discountPrice: product.discountPrice, image: product.image[0].proImg1, description: product.description } } }).then(async (res) => {
-          return resolve({ status: true, msge: "New product add in cart.", count: res.products.length + 1 })
+          resolve({ status: true, msge: "New product add in cart.", count: res.products.length + 1 })
         })
       }
     } else {
@@ -381,9 +381,9 @@ const userCart = (proId, userData,) => {
       await newCart.save(async (err, res) => {
         if (err) {
           console.log(err);
-          return reject({ status: false, error: "Something went wrong try again." })
+          reject({ status: false, error: "Something went wrong try again." })
         }
-        return resolve({ status: true, msge: "Product add to cart.", count: 1 })
+        resolve({ status: true, msge: "Product add to cart.", count: 1 })
       })
     }
   })
@@ -420,20 +420,20 @@ const userDetailsUpdate = (user, number, image, data) => {
     const Validations = await updateProfileValidation(data)
 
     if (Validations.error) {
-      return reject({ status: false, errorUpdate: Validations.error.details[0].message.replace(/"/g, '') });
+      reject({ status: false, errorUpdate: Validations.error.details[0].message.replace(/"/g, '') });
     }
 
     if (user != data.email) {
       const user = await userModel.findOne({ email: data.email })
       if (user) {
-        return reject({ status: false, errorUpdate: "Another account is using this email" })
+        reject({ status: false, errorUpdate: "Another account is using this email" })
       }
     }
 
     if (number != data.phone_number) {
       const user = await userModel.findOne({ phone_number: data.phone_number })
       if (user) {
-        return reject({ status: false, errorUpdate: "Another account is using this phone number" })
+        reject({ status: false, errorUpdate: "Another account is using this phone number" })
       }
     }
 
@@ -467,7 +467,7 @@ const changeCartQuantity = (data) => {
   return new Promise(async (resolve, reject) => {
 
     if (data.qty <= 1 && data.count == -1) {
-      return resolve({ quantity: 0 })
+      resolve({ quantity: 0 })
     }
     const cart = await cartModel.findById({ _id: data.cart })
 
@@ -478,7 +478,7 @@ const changeCartQuantity = (data) => {
         resolve({ error: "Out of stock" })
       } else {
         await cartModel.updateOne({ 'products.productId': data.product }, { $inc: { 'products.$.quantity': data.count } })
-        return resolve({ status: true, msge: "Quantity updated", count: data.count })
+        resolve({ status: true, msge: "Quantity updated", count: data.count })
       }
     }
   })
@@ -568,23 +568,23 @@ const checkCouponCode = (Coupon, data) => {
     const coupon = await DiscountsModel.findOne({ code: Coupon })
 
     if (!coupon) {
-      return reject({ status: false, errorCoupon: "The entered coupon is wrong." })
+      reject({ status: false, errorCoupon: "The entered coupon is wrong." })
     }
 
     const user = await DiscountsModel.find({ code: Coupon, usedUsers: { $in: [data] } }).count()
 
     if (new Date().getTime() >= new Date(coupon.expireDate).getTime()) {
       await DiscountsModel.deleteOne({ code: Coupon })
-      return reject({ status: false, errorCoupon: "Coupon expired, please await the next coupon." })
+      reject({ status: false, errorCoupon: "Coupon expired, please await the next coupon." })
     }
 
     if (coupon.limit == 0) {
       await DiscountsModel.deleteOne({ code: Coupon })
-      return reject({ status: false, errorCoupon: "Coupon limit exceeds please expect next coupon." })
+      reject({ status: false, errorCoupon: "Coupon limit exceeds please expect next coupon." })
     }
 
     if (user == 1) {
-      return reject({ status: false, errorCoupon: "This coupon has already been used." })
+      reject({ status: false, errorCoupon: "This coupon has already been used." })
     }
 
     await DiscountsModel.findOneAndUpdate({ code: Coupon }, { $inc: { limit: -1 } })
@@ -602,7 +602,7 @@ const checkCouponCode = (Coupon, data) => {
 
     await cartModel.findOneAndUpdate({ userId: data }, { $set: { couponDiscount: discount } })
 
-    return resolve({ status: true, msge: "Coupon successfully updated.", netAmount, discount })
+    resolve({ status: true, msge: "Coupon successfully updated.", netAmount, discount })
 
   })
 }
@@ -617,12 +617,12 @@ const saveWishlist = (proId, userId) => {
       const product = await whishlistModel.findOne({ user: userId, product: { $in: [proId] } })
 
       if (product) {
-        return resolve({ status: false, errWishlist: "Product already added wishlist." })
+        resolve({ status: false, errWishlist: "Product already added wishlist." })
       }
 
       await whishlistModel.findOneAndUpdate({ user: userId }, { $push: { product: proId } })
 
-      return resolve({ status: true, msge: "New product added." })
+      resolve({ status: true, msge: "New product added." })
     } else {
 
       const newWishlist = new whishlistModel({
@@ -632,9 +632,9 @@ const saveWishlist = (proId, userId) => {
 
       await newWishlist.save(async (err, res) => {
         if (err) {
-          return resolve({ status: false, errWishlist: "Something went wrong try again." })
+          resolve({ status: false, errWishlist: "Something went wrong try again." })
         }
-        return resolve({ status: true, msge: "Wishlist created successfully." })
+        resolve({ status: true, msge: "Wishlist created successfully." })
       })
     }
 
@@ -653,7 +653,7 @@ const wishlistProductDelete = (userId, proId) => {
     const userWishlist = await whishlistModel.findOne({ user: userId })
     if (userWishlist) {
       await whishlistModel.findOneAndUpdate({ user: userId }, { $pull: { product: proId } })
-      return resolve({ status: true, msge: 'Product remove from wishlist.' })
+      resolve({ status: true, msge: 'Product remove from wishlist.' })
     }
   })
 }
@@ -742,9 +742,9 @@ const billingAddress = (data, User) => {
 
     await newAdddress.save(async (err, res) => {
       if (err) {
-        return reject({ status: false, error: "Something went wrong try again." })
+        reject({ status: false, error: "Something went wrong try again." })
       }
-      return resolve({ status: true, msge: "Successfully added new addresss." })
+      resolve({ status: true, msge: "Successfully added new addresss." })
     })
   })
 }
@@ -871,7 +871,7 @@ const newOrder = (data, payment) => {
       await newOrder.save(async (err, res) => {
         if (err) {
           console.log(err);
-          return reject({ status: false, error: "Something went wrong try again." })
+          reject({ status: false, error: "Something went wrong try again." })
         }
 
         res.product.forEach(async (result) => {
@@ -881,7 +881,7 @@ const newOrder = (data, payment) => {
           }
         })
 
-        return resolve({ status: true, msge: "order created successfully.", data: res })
+        resolve({ status: true, msge: "order created successfully.", data: res })
       })
     } else {
       resolve()
@@ -902,7 +902,7 @@ const generateRazorpay = (data) => {
       if (err) {
         console.log(err);
       }
-      return resolve(order)
+      resolve(order)
     })
   })
 }
@@ -968,28 +968,28 @@ const getDirection = (Order) => {
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { 'product.$[].deliverDate': todayDateFormat } })
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { deliverDate: todayDateFormat } })
-      return resolve({ status: true, date: todayDateFormat })
+      resolve({ status: true, date: todayDateFormat })
     } else if (dist >= 50 && dist <= 100) {
       var dt = new Date();
       var deliverDate = dt.setDate(dt.getDate() + 2);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { 'product.$[].deliverDate': todayDateFormat } })
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { deliverDate: todayDateFormat } })
-      return resolve({ status: true, date: todayDateFormat })
+      resolve({ status: true, date: todayDateFormat })
     } else if (dist >= 100) {
       var dt = new Date();
       var deliverDate = dt.setDate(dt.getDate() + 4);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { 'product.$[].deliverDate': todayDateFormat } })
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { deliverDate: todayDateFormat } })
-      return resolve({ status: true, date: todayDateFormat })
+      resolve({ status: true, date: todayDateFormat })
     } else {
       var dt = new Date();
       var deliverDate = dt.setDate(dt.getDate() + 6);
       var todayDateFormat = moment(deliverDate).format("ddd MMM DD YYYY")
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { 'product.$[].deliverDate': todayDateFormat } })
       await orderModel.updateMany({ _id: Order.data._id }, { $set: { deliverDate: todayDateFormat } })
-      return resolve({ status: true, date: todayDateFormat })
+      resolve({ status: true, date: todayDateFormat })
     }
 
   })
@@ -1166,4 +1166,4 @@ const productSerach = (searchString) => {
 
 
 
-module.exports = { userSignup, userLogin, otpSend, otpverification, forgetPassword, resetpassword, userDetails, otpVerify, listAllCategory, listAllSubcategory, newProducts, userCart, productView, cartCount, cartItems, userDetailsUpdate, changeCartQuantity, cartProductDelete, totalAmount, subTotal, couponDetails, checkCouponCode, saveWishlist, getWishlist, wishlistProductDelete, shippingCost, categoryProducts, addressCheck, pincodeDetails, billingAddress, getAddress, conformAddress, shippingAddress, AddNewAddress, mensFashion, AppleBrandProducts, newOrder, generateRazorpay, verifyPayment, updatePaymentStatus, getDirection, getOrder, userOrder, orderCancel, orderTrack, paymentFailed, generatePdf, productSerach, productSerach, invoiceSend }
+module.exports = { userSignup, userLogin, otpSend, otpverification, forgetPassword, resetpassword, userDetails, otpVerify, listAllCategory, listAllSubcategory, newProducts, userCart, productView, cartCount, cartItems, userDetailsUpdate, changeCartQuantity, cartProductDelete, totalAmount, subTotal, couponDetails, checkCouponCode, saveWishlist, getWishlist, wishlistProductDelete, shippingCost, categoryProducts, addressCheck, pincodeDetails, billingAddress, getAddress, conformAddress, shippingAddress, AddNewAddress, mensFashion, AppleBrandProducts, newOrder, generateRazorpay, verifyPayment, updatePaymentStatus, getDirection, getOrder, userOrder, orderCancel, orderTrack, paymentFailed, generatePdf, productSerach, invoiceSend }
