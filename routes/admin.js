@@ -61,7 +61,6 @@ router.get('/deleteUser/:id',verifyAdminToken,(req,res)=>{
    let id = req.params.id
    deleteUser(id).then(()=>{
        res.clearCookie("token");
-       res.session.destroy()
        res.redirect('/admin/users')
    })
 })
@@ -71,7 +70,6 @@ router.get('/blockUser/:id',verifyAdminToken,(req,res)=>{
   let id = req.params.id
   blockUser(id).then(()=>{
     res.clearCookie("token");
-    res.session.destroy()
     res.redirect('/admin/users')
   })
 })
