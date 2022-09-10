@@ -28,7 +28,6 @@ router.post('/login',(req,res)=>{
     res.cookie("Admintoken",result.token,{ httpOnly: true });
     res.redirect('/admin/dashboard')
    }).catch((error)=>{
-     console.log(error);
      req.session.adminLoginErr=error.adminLoginErr
      res.redirect('/admin')
    })
@@ -58,8 +57,7 @@ router.get('/users',verifyAdminToken,(req,res)=>{
 
 //delete user router
 router.get('/deleteUser/:id',verifyAdminToken,(req,res)=>{
-   let id = req.params.id
-   deleteUser(id).then(()=>{
+   deleteUser(req.params.id).then(()=>{
        res.clearCookie("token");
        res.redirect('/admin/users')
    })
@@ -67,8 +65,7 @@ router.get('/deleteUser/:id',verifyAdminToken,(req,res)=>{
 
 //block user router
 router.get('/blockUser/:id',verifyAdminToken,(req,res)=>{
-  let id = req.params.id
-  blockUser(id).then(()=>{
+  blockUser(req.params.id).then(()=>{
     res.clearCookie("token");
     res.redirect('/admin/users')
   })
@@ -76,8 +73,7 @@ router.get('/blockUser/:id',verifyAdminToken,(req,res)=>{
 
 //unblock user router
 router.get('/unBlockUser/:id',verifyAdminToken,(req,res)=>{
-  let id = req.params.id
-  unBlockUser(id).then(()=>{
+  unBlockUser(req.params.id).then(()=>{
     res.redirect('/admin/users')
   })
 })
@@ -97,7 +93,6 @@ router.post('/addProduct',upload.fields([{name:"product_img",maxCount:1},{name:"
      let proImg3=req.files.thumb_img2[0].filename
      let proImg4=req.files.thumb_img3[0].filename
     addProduct(req.body,proImg1,proImg2,proImg3,proImg4).then((result)=>{
-        console.log(result);  
         res.redirect('/admin/listProducts')
     }).catch((err)=>{
        req.session.productAddErr=err.productAddErr
@@ -122,7 +117,6 @@ router.get('/addCategory',verifyAdminToken,async(req,res)=>{
 //add new category router
 router.post('/category',(req,res)=>{
     addCategory(req.body).then((result)=>{
-         console.log(result);
          res.redirect('/admin/addCategory')
     }).catch((err)=>{
           console.log(err);
@@ -135,7 +129,6 @@ router.post('/category',(req,res)=>{
 router.post('/subcategory',(req,res)=>{
     addSubCategory(req.body).then((result)=>{
          res.redirect('/admin/listCategory')
-         console.log(result);
     }).catch((err)=>{
          console.log(err);
          req.session.subcategoryErr=err.subcategoryErr
@@ -159,7 +152,6 @@ router.get('/addBrands',verifyAdminToken,(req,res)=>{
 //add new brand router
 router.post('/Addbrand',(req,res)=>{
    addBrand(req.body).then((result)=>{
-     console.log(result);
      res.redirect('/admin/listBrands')
    }).catch((err)=>{
       req.session.brandErr=err.brandErr

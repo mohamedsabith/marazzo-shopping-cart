@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const jwt =require('jsonwebtoken')
 const moment = require('moment');
 require("dotenv").config();
@@ -13,16 +13,16 @@ router.get("/",async(req, res)=> {
   
   res.header("Cache-control", "no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0");
 
-  const token = req.cookies.token;
   const categories= await listAllCategory()
   const newProduct= await newProducts()
   const Menfashion = await mensFashion()
   const appleBrand = await AppleBrandProducts()
-    if(token){
-      var decode= jwt.decode(token)
+
+    if(req.cookies.token){
+      var decode= jwt.decode(req.cookies.token)
       const totalAmt = await totalAmount(decode.email)
       const countCart = await cartCount(decode.email)
-    res.render("user/home",{user:decode.name,token:token,categories,newProduct,countCart,totalAmt,Menfashion,appleBrand});
+    res.render("user/home",{user:decode.name,token:req.cookies.token,categories,newProduct,countCart,totalAmt,Menfashion,appleBrand});
    }else{
      res.render('user/home',{categories,newProduct,countCart:0,Menfashion,appleBrand})
    }
@@ -70,10 +70,7 @@ router.post("/otpverification",(req, res) => {
 
   res.header("Cache-control","no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0");
 
-      const user=req.session.signupResult.data
-      const randomNumber=req.session.signupResult.randomNumber
-
-  otpverification(req.body,user,randomNumber).then((result) => {
+  otpverification(req.body,req.session.signupResult.data,req.session.signupResult.randomNumber).then((result) => {
     res.cookie("token", result.token, { httpOnly: true });
      req.session.loggedIn=true
       res.redirect("/");
@@ -101,7 +98,7 @@ router.post("/login", (req, res) => {
 
   userLogin(req.body).then(async (result) => {
 
-      otpSend(result).then((response) => {
+      otpSend(result).then(() => {
           const number = result.user.phone_number;
           const last4num = String(number).slice(-4);
           req.session.number = last4num;
@@ -136,9 +133,7 @@ router.post('/otpVerify/:id',(req,res)=>{
 
   res.header("Cache-control","no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0");
 
-    let id = req.params.id
-
-    otpVerify(req.body,id).then((response)=>{
+    otpVerify(req.body,req.params.id).then((response)=>{
       req.session.loggedIn=true
       res.cookie("token", response.token, { httpOnly: true });
       res.redirect('/')
