@@ -1,4 +1,4 @@
-# woodpecker.services E-commerce Website
+# marazzo.store E-commerce Website
 
 ## Table of contents
 
@@ -21,7 +21,7 @@ NOTE: Please read the RUN section before opening an issue.
 
 The application is deployed to Digital Ocean and can be accessed through the following link:
 
-[woodpecker.services on DigitalOcean](https://woodpecker.services/)
+[marazzo.store on DigitalOcean](https://marazzo.store/)
 
 The website resembles a real store and you can add products to your cart and wishlist and pay for them. If you want to try the checkout process, you can use the dummy card number/ upi/ Internet Bankinng provided by Razorpay for testing . Please <u><b>DO NOT</b></u> provide real card number and data.
 
@@ -32,19 +32,21 @@ In order to access the admin panel on "/admin" you need to provide the admin ema
 
 To run this application, you have to set your own environmental variables. For security reasons, some variables have been hidden from view and used as environmental variables with the help of dotenv package. Below are the variables that you need to set in order to run the application:
 
-- KEY_ID:     This is the razorpay key_Id (string).
+- CONNECTION_URL: This is the database connection url (string).
 
-- KEY_SECRET:  This is the razorpay key_Secret (string).
+- RAZORPAY_KEY: This is the razorpay key_Id (string).
 
-- TWILIO_SERVICE_ID: This is the Twilio Service Id (string).
+- RAZORPAY_SECRET: This is the razorpay key_Secret (string).
 
-- TWILIO_ACCOUNT_SID: This is the Twilio accountSID (string).
+- FAST2SMSAPI: This is the Fast2sms Service Id (string).
 
-- TWILIO_AUTH_TOKEN: This is the Twilio AuthToken (string).
+- JWT_TOKEN: This is the jwt secret ket (string).
 
-- NODEMAILER_PASSWD:This is the NodeMailer password(string)
+- RESET_PASSWORD_KEY: This is the jwt reset passsword secret key (string).
 
-- PORT: Specify the port Number
+- GOOGLE_APP_PASS: This is the NodeMailer password (string)
+
+- GOOGLE_APP_EMAIL: This is the NodeMailer gmail (string)
 
 After you've set these environmental variables in the .env file at the root of the project, and intsall node modules using  `npm install`
 
@@ -79,6 +81,8 @@ Users can do the following:
 - Display the shopping cart
 - To checkout, a user must be logged in
 - Checkout information is processed using razorpay and the payment is send to the admin
+- Product offers and coupons
+- Invoice pdf generator
 - The profile contains all the orders a user has made
 - View order details and cancel the orders
 - Update their profile
@@ -103,4 +107,4 @@ Admins can do the following:
 [![License](https://img.shields.io/:License-MIT-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - MIT License
-- Copyright 2022 © [Rohit KV](https://github.com/Rohitkv11)
+- Copyright 2022 © [Mohamed Sabith](https://github.com/mohamedsabith)
