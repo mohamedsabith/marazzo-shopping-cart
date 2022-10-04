@@ -17,7 +17,7 @@ NOTE: Please read the RUN section before opening an issue.
 
 ## Demo
 
-![screenshot](woodpecker.jpg)
+![screenshot](marazzo.png)
 
 The application is deployed to Digital Ocean and can be accessed through the following link:
 
