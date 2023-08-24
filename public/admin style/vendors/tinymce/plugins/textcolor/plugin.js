@@ -7,16 +7,17 @@
  * Version: 5.6.2 (2020-12-08)
  */
 (function () {
-    'use strict';
+  'use strict';
 
-    var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-    function Plugin () {
-      global.add('textcolor', function () {
-        console.warn('Text color plugin is now built in to the core editor, please remove it from your editor configuration');
-      });
-    }
+  function Plugin() {
+    global.add('textcolor', function () {
+      console.warn(
+        'Text color plugin is now built in to the core editor, please remove it from your editor configuration'
+      );
+    });
+  }
 
-    Plugin();
-
-}());
+  Plugin();
+})();

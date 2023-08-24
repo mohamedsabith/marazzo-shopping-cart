@@ -1,8 +1,8 @@
-(function($) {
+(function ($) {
   'use strict';
-  $.fn.andSelf = function() {
+  $.fn.andSelf = function () {
     return this.addBack.apply(this, arguments);
-  }
+  };
 
   if ($('.example-1').length) {
     $('.example-1').owlCarousel({
@@ -13,15 +13,15 @@
       autoplayTimeout: 4500,
       responsive: {
         0: {
-          items: 1
+          items: 1,
         },
         600: {
-          items: 3
+          items: 3,
         },
         1000: {
-          items: 5
-        }
-      }
+          items: 5,
+        },
+      },
     });
   }
 
@@ -33,7 +33,10 @@
       nav: true,
       autoplay: true,
       autoplayTimeout: 5500,
-      navText: ["<i class='ti-angle-left'></i>", "<i class='ti-angle-right'></i>"]
+      navText: [
+        "<i class='ti-angle-left'></i>",
+        "<i class='ti-angle-right'></i>",
+      ],
     });
   }
 
@@ -47,9 +50,9 @@
       autoplayTimeout: 8500,
       responsive: {
         600: {
-          items: 4
-        }
-      }
+          items: 4,
+        },
+      },
     });
   }
 
@@ -62,9 +65,9 @@
       autoplayTimeout: 6000,
       responsive: {
         600: {
-          items: 4
-        }
-      }
+          items: 4,
+        },
+      },
     });
   }
 
@@ -100,15 +103,15 @@
       autoplayTimeout: 3000,
       responsive: {
         0: {
-          items: 1
+          items: 1,
         },
         600: {
-          items: 3
+          items: 3,
         },
         1000: {
-          items: 5
-        }
-      }
+          items: 5,
+        },
+      },
     });
   }
 
@@ -122,13 +125,12 @@
       autoplayTimeout: 7000,
       responsive: {
         480: {
-          items: 4
+          items: 4,
         },
         600: {
-          items: 4
-        }
-      }
+          items: 4,
+        },
+      },
     });
   }
-
 })(jQuery);

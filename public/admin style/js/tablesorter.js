@@ -1,6 +1,6 @@
-(function($) {
+(function ($) {
   'use strict';
-  $(function() {
+  $(function () {
     if ($('#sortable-table-1').length) {
       $('#sortable-table-1').tablesort();
     }

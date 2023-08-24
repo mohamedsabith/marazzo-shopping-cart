@@ -1,5 +1,5 @@
-var Mongoose = require("mongoose");
-const moment = require("moment");
+var Mongoose = require('mongoose');
+const moment = require('moment');
 
 var DiscountCodesSchema = new Mongoose.Schema({
   code: {
@@ -15,7 +15,7 @@ var DiscountCodesSchema = new Mongoose.Schema({
   expireDate: {
     type: String,
     required: true,
-    default: moment().format("DD/MM/YYYY") + ";" + moment().format("hh:mm:ss"),
+    default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss'),
   },
   limit: {
     type: Number,
@@ -31,10 +31,10 @@ var DiscountCodesSchema = new Mongoose.Schema({
   Created_at: {
     type: String,
     required: true,
-    default: moment().format("DD/MM/YYYY") + ";" + moment().format("hh:mm:ss"),
+    default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss'),
   },
 });
 
-const DiscountsModel = Mongoose.model("DiscountCodes", DiscountCodesSchema);
+const DiscountsModel = Mongoose.model('DiscountCodes', DiscountCodesSchema);
 
 module.exports = DiscountsModel;

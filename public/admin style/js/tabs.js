@@ -1,9 +1,9 @@
-(function($) {
+(function ($) {
   'use strict';
-  $(function() {
+  $(function () {
     if ($('.demo-tabs').length) {
       $('.demo-tabs').pwstabs({
-        effect: 'none'
+        effect: 'none',
       });
     }
 
@@ -15,7 +15,7 @@
       $('#rtl-tabs-1').pwstabs({
         effect: 'slidedown',
         defaultTab: 2,
-        rtl: true
+        rtl: true,
       });
     }
 
@@ -25,7 +25,7 @@
         defaultTab: 1,
         containerWidth: '600px',
         tabsPosition: 'vertical',
-        verticalPosition: 'left'
+        verticalPosition: 'left',
       });
     }
 
@@ -34,15 +34,14 @@
         effect: 'slidedown',
         defaultTab: 2,
         containerWidth: '600px',
-        horizontalPosition: 'bottom'
+        horizontalPosition: 'bottom',
       });
     }
 
     if ($('.tickets-tab').length) {
       $('.tickets-tab').pwstabs({
-        effect: 'none'
+        effect: 'none',
       });
     }
-
   });
 })(jQuery);

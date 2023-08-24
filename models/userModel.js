@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 const userSchema = new Mongoose.Schema({
   username: {
@@ -22,23 +22,23 @@ const userSchema = new Mongoose.Schema({
   },
   gender: {
     type: String,
-    default: "",
+    default: '',
   },
   country: {
     type: String,
-    default: "",
+    default: '',
   },
   state: {
     type: String,
-    default: "",
+    default: '',
   },
   zipcode: {
     type: Number,
-    default: "",
+    default: '',
   },
   address: {
     type: String,
-    default: "",
+    default: '',
   },
   city: {
     type: String,
@@ -48,7 +48,7 @@ const userSchema = new Mongoose.Schema({
   },
   image: {
     type: String,
-    default: "",
+    default: '',
   },
   otpcode: {
     type: Number,
@@ -60,7 +60,7 @@ const userSchema = new Mongoose.Schema({
   },
   resetLink: {
     type: String,
-    default: "notreset",
+    default: 'notreset',
   },
   Created_at: {
     type: String,
@@ -68,6 +68,6 @@ const userSchema = new Mongoose.Schema({
   },
 });
 
-const userModel = Mongoose.model("User", userSchema);
+const userModel = Mongoose.model('User', userSchema);
 
 module.exports = userModel;

@@ -1,6 +1,6 @@
-(function($) {
+(function ($) {
   'use strict';
-  $(function() {
+  $(function () {
     $('.repeater').repeater({
       // (Optional)
       // "defaultValues" sets the values of added items.  The keys of
@@ -8,13 +8,13 @@
       // If a default value is not specified for an input, then it will
       // have its value cleared.
       defaultValues: {
-        'text-input': 'foo'
+        'text-input': 'foo',
       },
       // (Optional)
       // "show" is called just after an item is added.  The item is hidden
       // at this point.  If a show callback is not given the item will
       // have $(this).show() called on it.
-      show: function() {
+      show: function () {
         $(this).slideDown();
       },
       // (Optional)
@@ -24,7 +24,7 @@
       // "hide" allows for a confirmation step, to send a delete request
       // to the server, etc.  If a hide callback is not given the item
       // will be deleted.
-      hide: function(deleteElement) {
+      hide: function (deleteElement) {
         if (confirm('Are you sure you want to delete this element?')) {
           $(this).slideUp(deleteElement);
         }
@@ -32,7 +32,7 @@
       // (Optional)
       // Removes the delete button from the first list item,
       // defaults to false.
-      isFirstItemUndeletable: true
-    })
+      isFirstItemUndeletable: true,
+    });
   });
 })(jQuery);

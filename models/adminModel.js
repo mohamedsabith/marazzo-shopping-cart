@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 const adminSchema = new Mongoose.Schema({
   username: {
@@ -19,6 +19,6 @@ const adminSchema = new Mongoose.Schema({
   },
 });
 
-const adminModel = Mongoose.model("Admins", adminSchema);
+const adminModel = Mongoose.model('Admins', adminSchema);
 
 module.exports = adminModel;

@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 // Address Schema
 const AddressSchema = new Mongoose.Schema({
@@ -39,6 +39,6 @@ const AddressSchema = new Mongoose.Schema({
   },
 });
 
-const addressModel = Mongoose.model("Address", AddressSchema);
+const addressModel = Mongoose.model('Address', AddressSchema);
 
 module.exports = addressModel;

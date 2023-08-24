@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 const orderSchema = new Mongoose.Schema({
   user: {
@@ -17,11 +17,11 @@ const orderSchema = new Mongoose.Schema({
       subtotal: Number,
       paid: {
         type: String,
-        default: "Not Paid",
+        default: 'Not Paid',
       },
       status: {
         type: String,
-        default: "Order placed",
+        default: 'Order placed',
       },
       created: String,
       deliverDate: {
@@ -83,6 +83,6 @@ const orderSchema = new Mongoose.Schema({
   },
 });
 
-const orderModel = Mongoose.model("Orders", orderSchema);
+const orderModel = Mongoose.model('Orders', orderSchema);
 
 module.exports = orderModel;

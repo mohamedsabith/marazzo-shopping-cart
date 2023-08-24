@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 const WishlistSchema = new Mongoose.Schema({
   user: {
@@ -8,7 +8,7 @@ const WishlistSchema = new Mongoose.Schema({
   product: [
     {
       type: Mongoose.Schema.Types.ObjectId,
-      ref: "Products",
+      ref: 'Products',
       default: null,
     },
   ],
@@ -18,6 +18,6 @@ const WishlistSchema = new Mongoose.Schema({
   },
 });
 
-const whishlistModel = Mongoose.model("Whishlist", WishlistSchema);
+const whishlistModel = Mongoose.model('Whishlist', WishlistSchema);
 
 module.exports = whishlistModel;

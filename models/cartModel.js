@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 
 const cartSchema = new Mongoose.Schema({
   userId: {
@@ -52,6 +52,6 @@ const cartSchema = new Mongoose.Schema({
   },
 });
 
-const cartModel = Mongoose.model("Carts", cartSchema);
+const cartModel = Mongoose.model('Carts', cartSchema);
 
 module.exports = cartModel;
